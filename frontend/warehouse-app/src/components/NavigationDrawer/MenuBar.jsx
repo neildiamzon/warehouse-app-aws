@@ -17,13 +17,18 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import menuItems from './menuItems';
+import Link from '@mui/material/Link';
 
 const drawerWidth = 400;
 
-export default function MenuBar({userRole}) {
-    const filteredMenuItems = menuItems.filter(item => item.roles.includes(userRole));
+export default function MenuBar({userRole}) {const filteredMenuItems = menuItems
+    .filter(item => item.roles.includes(userRole)) 
+    .map(item => ({
+      ...item, 
+      children: item.children
+        && item.children.filter(child => child.roles.includes(userRole)) 
+    }));
 
-    console.log(filteredMenuItems)
     const [openMenus, setOpenMenus] = React.useState({}); 
 
     const handleToggle = (menuText) => {
@@ -92,6 +97,11 @@ export default function MenuBar({userRole}) {
             </List>
             
             <Divider />
+            <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 4}}>
+                <Link href="#">About the Developer</Link>
+                <Link href="#">Contact Me</Link>
+            </Box>
+            
         </Drawer>
         
         </Box>

@@ -11,9 +11,14 @@ import React from 'react';
 
 const menuItems = [
     {
+        text: 'All Products',
+        icon: <InventoryIcon />,
+        roles: [ 'user']
+    },
+    {
         text: 'Inventory Management',
         icon: <InventoryIcon />,
-        roles: ['admin', 'staff', 'user'],
+        roles: ['admin', 'staff'],
         children: [
             { text: 'View Products', path: '/inventory/view', icon: <ViewListIcon />, roles: ['admin', 'staff', 'user'] },
             { text: 'Add New Product', path: '/inventory/add', icon: <AddBoxIcon />, roles: ['admin'] },
