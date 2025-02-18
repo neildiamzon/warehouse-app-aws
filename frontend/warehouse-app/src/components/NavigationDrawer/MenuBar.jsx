@@ -21,13 +21,14 @@ import Link from '@mui/material/Link';
 
 const drawerWidth = 400;
 
-export default function MenuBar({userRole}) {const filteredMenuItems = menuItems
-    .filter(item => item.roles.includes(userRole)) 
-    .map(item => ({
-      ...item, 
-      children: item.children
-        && item.children.filter(child => child.roles.includes(userRole)) 
-    }));
+export default function MenuBar({userRole}) {
+    const filteredMenuItems = menuItems
+        .filter(item => item.roles.includes(userRole)) 
+        .map(item => ({
+        ...item, 
+        children: item.children
+            && item.children.filter(child => child.roles.includes(userRole)) 
+        }));
 
     const [openMenus, setOpenMenus] = React.useState({}); 
 
@@ -44,7 +45,7 @@ export default function MenuBar({userRole}) {const filteredMenuItems = menuItems
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
-            <Toolbar>
+            <Toolbar sx={{ backgroundColor: '#4caf50', color: 'white' }}>
             <Typography variant="h6" noWrap component="div">
                 Welcome, {userRole}
             </Typography>
@@ -97,7 +98,7 @@ export default function MenuBar({userRole}) {const filteredMenuItems = menuItems
             </List>
             
             <Divider />
-            <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 4}}>
+            <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap'}}>
                 <Link href="#">About the Developer</Link>
                 <Link href="#">Contact Me</Link>
             </Box>
