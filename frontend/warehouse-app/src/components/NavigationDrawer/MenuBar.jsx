@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -18,8 +17,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import menuItems from './menuItems';
 import Link from '@mui/material/Link';
+import AboutDeveloper from '../Pop/AboutDeveloper';
+import HeaderBar from '../Header/HeaderBar'
 
-const drawerWidth = 400;
+const drawerWidth = 330;
 
 export default function MenuBar({userRole}) {
     const filteredMenuItems = menuItems
@@ -41,16 +42,7 @@ export default function MenuBar({userRole}) {
     return (
         <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar
-            position="fixed"
-            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-        >
-            <Toolbar sx={{ backgroundColor: '#4caf50', color: 'white' }}>
-            <Typography variant="h6" noWrap component="div">
-                Welcome, {userRole}
-            </Typography>
-            </Toolbar>
-        </AppBar>
+        <HeaderBar userRole={userRole} />
         <Drawer
             sx={{
             width: drawerWidth,
@@ -99,8 +91,8 @@ export default function MenuBar({userRole}) {
             
             <Divider />
             <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap'}}>
-                <Link href="#">About the Developer</Link>
-                <Link href="#">Contact Me</Link>
+                <Link href="#"><a><AboutDeveloper></AboutDeveloper>About the Developer</a></Link>
+                <Link href="#"><a>Contact Me</a></Link>
             </Box>
             
         </Drawer>

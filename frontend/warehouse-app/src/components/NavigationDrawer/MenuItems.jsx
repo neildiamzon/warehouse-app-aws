@@ -7,6 +7,10 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PersonIcon from '@mui/icons-material/Person';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleIcon from '@mui/icons-material/People';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import React from 'react';
 
 const menuItems = [
@@ -29,12 +33,7 @@ const menuItems = [
     {
         text: 'Invoices',
         icon: <ReceiptIcon />, // Icon for the menu item
-        roles: ['admin', 'staff'], // Roles that can access this menu item
-        children: [
-            { text: 'View Invoices', path: '/invoices/view', icon: <ListAltIcon />, roles: ['admin', 'staff'] },
-            { text: 'Add New Invoice', path: '/invoices/add', icon: <AddShoppingCartIcon />, roles: ['admin', 'staff'] },
-            { text: 'Edit Invoices', path: '/invoices/edit', icon: <EditIcon />, roles: ['admin', 'staff'] }
-        ]
+        roles: ['admin', 'staff'] // Roles that can access this menu item
     },
     {
         text: 'My Orders',
@@ -45,6 +44,12 @@ const menuItems = [
             { text: 'Add New Order', path: '/my-orders/add', icon: <AddShoppingCartIcon />, roles: ['user'] },
             { text: 'Edit Orders', path: '/my-orders/edit', icon: <EditIcon />, roles: ['user'] }
         ]
+    },
+    
+    {
+        text: 'User Management',
+        icon: <PersonIcon />,
+        roles: ['admin', 'staff']
     }
 ];
 
