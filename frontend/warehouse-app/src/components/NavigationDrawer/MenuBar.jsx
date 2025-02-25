@@ -1,28 +1,27 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import menuItems from './menuItems';
 import Link from '@mui/material/Link';
-import AboutDeveloper from '../Pop/AboutDeveloper';
-import HeaderBar from '../Header/HeaderBar'
+import AboutDeveloper from '../Modal/AboutDeveloper';
+import ContactMe from "../Modal/ContactMe";
+import { useNavigate } from "react-router-dom"; 
 
 const drawerWidth = 330;
 
 export default function MenuBar({userRole}) {
+    const navigate = useNavigate();
     const filteredMenuItems = menuItems
         .filter(item => item.roles.includes(userRole)) 
         .map(item => ({
@@ -31,7 +30,8 @@ export default function MenuBar({userRole}) {
             && item.children.filter(child => child.roles.includes(userRole)) 
         }));
 
-    const [openMenus, setOpenMenus] = React.useState({}); 
+    const [openMenus, setOpenMenus] = useState({}); 
+    const [openModal, setOpenModal] = useState(null); // Holds the current open dialog
 
     const handleToggle = (menuText) => {
         setOpenMenus(prev => ({
@@ -39,10 +39,22 @@ export default function MenuBar({userRole}) {
         [menuText]: !prev[menuText],
         }));
     };
+
+    const handleOpenModals = (modal) => {
+        setOpenModal(modal);
+    }
+
+    const handleCloseModals = () => {
+        setOpenModal(null); // Close the dialog
+    };
+
+    const handleSelect = (path) => {
+        navigate(path)
+    }
+
     return (
         <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <HeaderBar userRole={userRole} />
         <Drawer
             sx={{
             width: drawerWidth,
@@ -61,7 +73,10 @@ export default function MenuBar({userRole}) {
                 {filteredMenuItems.map((item, index) => (
                     <React.Fragment key={item.text + index}>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={() => handleToggle(item.text)}>
+                            <ListItemButton onClick={() => {
+                                handleToggle(item.text)
+                                if (!item.children) handleSelect(item.path)
+                            }}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
                                 <ListItemText primary={item.text} />{item.children && (
                                 <ListItemIcon>
@@ -76,7 +91,7 @@ export default function MenuBar({userRole}) {
                                 <List component="div" disablePadding>
                                     {item.children.map((child, cindex) => (
                                         <ListItem key={child.text + cindex} disablePadding>
-                                            <ListItemButton sx={{pl:5}} onClick={() => handleSelect(child.text)}>
+                                            <ListItemButton sx={{pl:5}} onClick={() => handleSelect(child.path)}>
                                                 <ListItemIcon> {child.icon}</ListItemIcon>
                                                 <ListItemText primary={child.text} />
                                             </ListItemButton>
@@ -91,8 +106,10 @@ export default function MenuBar({userRole}) {
             
             <Divider />
             <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap'}}>
-                <Link href="#"><a><AboutDeveloper></AboutDeveloper>About the Developer</a></Link>
-                <Link href="#"><a>Contact Me</a></Link>
+                <Link onClick={() => handleOpenModals('aboutDeveloper')} href="#"><a>About the Developer</a></Link>
+                    {openModal === 'aboutDeveloper' && <AboutDeveloper onClose={handleCloseModals} />}
+                <Link onClick={() => handleOpenModals('contactMe')} href="#"><a>Contact Me</a></Link>
+                    {openModal === 'contactMe' && <ContactMe onClose={handleCloseModals} />}
             </Box>
             
         </Drawer>

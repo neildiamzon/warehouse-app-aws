@@ -23,12 +23,7 @@ const menuItems = [
         text: 'Inventory Management',
         icon: <InventoryIcon />,
         roles: ['admin', 'staff'],
-        children: [
-            { text: 'View Products', path: '/inventory/view', icon: <ViewListIcon />, roles: ['admin', 'staff', 'user'] },
-            { text: 'Add New Product', path: '/inventory/add', icon: <AddBoxIcon />, roles: ['admin'] },
-            { text: 'Edit Products', path: '/inventory/edit', icon: <EditIcon />, roles: ['admin'] },
-            { text: 'Remove Products', path: '/inventory/delete', icon: <DeleteIcon />, roles: ['admin'] }
-        ]
+        path: '/dashboard/inventory-management'
     },
     {
         text: 'Invoices',
@@ -40,9 +35,9 @@ const menuItems = [
         icon: <ShoppingCartIcon />,
         roles: ['user'],
         children: [
-            { text: 'View Invoices', path: '/my-orders/view', icon: <ListAltIcon />, roles: ['user'] },
-            { text: 'Add New Order', path: '/my-orders/add', icon: <AddShoppingCartIcon />, roles: ['user'] },
-            { text: 'Edit Orders', path: '/my-orders/edit', icon: <EditIcon />, roles: ['user'] }
+            { key: 'view-invoices', text: 'View Invoices', path: '/my-orders/view', icon: <ListAltIcon />, roles: ['user'] },
+            { key: 'new-orders', text: 'Add New Order', path: '/my-orders/add', icon: <AddShoppingCartIcon />, roles: ['user'] },
+            { key: 'edit-orders', text: 'Edit Orders', path: '/my-orders/edit', icon: <EditIcon />, roles: ['user'] }
         ]
     },
     

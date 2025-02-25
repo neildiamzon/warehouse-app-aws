@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -8,24 +8,38 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from "react-router-dom";
+import Person2Icon from '@mui/icons-material/Person2';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 export default function MenuBar({userRole}) {
+
+    const settings = [
+        { key: 'profile', label: 'Profile', path: '/profile', icon: Person2Icon }, 
+        { key: 'Logout', label: 'Logout', path: '/logout' , icon: LogoutIcon}
+    ];
 
     const drawerWidth = 330
     
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-    
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
     
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleMenuClick = (key, path) => {
+        if (key === "Logout") {
+            localStorage.removeItem("token"); // Remove authentication token
+            navigate('/login'); // Navigate to the login page
+        }
+        console.log(path)
+        //navigate(path); // Navigate to the respective page
+      };
+    const navigate = useNavigate();
     return (
         <AppBar
             position="fixed"
@@ -56,8 +70,9 @@ export default function MenuBar({userRole}) {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}>
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                            <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                            <MenuItem key={setting.key} onClick={() => handleMenuClick(setting.key, setting.path)}>
+                                <setting.icon sx={{ marginRight: 2 }} />
+                                <Typography sx={{ textAlign: 'center' }}>{setting.label}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
