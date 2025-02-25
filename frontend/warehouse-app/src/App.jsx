@@ -1,14 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import PermanentDrawerLeft from "./components/NavigationDrawer/PermanentDrawerLeft"
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import Login from './pages/Login'
+import Dashboard from './pages/Dashboard'
+import InventoryManagement from "./pages/InventoryManagement"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const isAuthenticated = true
 
   return (
-   <PermanentDrawerLeft />
+    <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard/*" element={isAuthenticated ? <Dashboard userRole={'admin'} /> : <Login/>}>
+            <Route path="inventory-management" element={<InventoryManagement />} />
+          </Route>
+        </Routes>
+    </Router>
   )
 }
 
