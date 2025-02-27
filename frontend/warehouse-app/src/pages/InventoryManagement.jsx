@@ -43,7 +43,7 @@ const initialRows = [
 ];
 
 const InventoryManagement = () => {
-  const [editModalOpen, setEditModalOpen] = useState(false);  
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
 
@@ -51,7 +51,7 @@ const InventoryManagement = () => {
   const [searchColumn, setSearchColumn] = useState("name");
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
-    pageSize: 10,
+    pageSize: 10
   });
 
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
@@ -67,8 +67,8 @@ const InventoryManagement = () => {
     const product = initialRows.find(row => row.id === rowSelectionModel[0]);
 
     console.log(product);
-    setSelectedProduct(product);  
-    setEditModalOpen(true);  
+    setSelectedProduct(product);
+    setEditModalOpen(true);
     console.log(`Edit product with id ${product}`);
 
   }
@@ -76,27 +76,27 @@ const InventoryManagement = () => {
   const handleDeleteProduct = () => {
     console.log(`Delete product with ${rowSelectionModel.join(', ')}`);
     setDeleteModalOpen(true);
-  } 
+  }
 
   const handleAddProduct = () => {
     setAddModalOpen(true);
-  } 
+  }
 
 
-const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setEditModalOpen(false);
     setDeleteModalOpen(false);
     setAddModalOpen(false);
-};
+  };
 
   return (
     <Container sx={{ mt: 2, width: "160%" }}>
-      <Typography variant="h4" gutterBottom sx={{mb: 2, mt: 5}}>
+      <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
         Inventory Management
       </Typography>
-      
+
       <Box sx={{ mt: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderColor: 'divider' }}>
-        <Box sx={{display: 'flex', alignItems: 'center', borderColor: 'divider' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', borderColor: 'divider' }}>
           <TextField
             select
             label="Search By"
@@ -115,17 +115,17 @@ const handleCloseModal = () => {
             variant="outlined"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{width: 300 }}
+            sx={{ width: 300 }}
           />
         </Box>
-        <Box  sx={{display: 'flex', justifyContent: 'flex-end' }}>
-          <Button 
-            variant="contained" 
-            startIcon={<AddIcon/>}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
             onClick={() => handleAddProduct()}
             sx={{ marginRight: 2 }}
           >
-              Add New Product
+            Add New Product
           </Button>
           <Button
             variant="contained"
@@ -152,24 +152,24 @@ const handleCloseModal = () => {
         rows={filteredRows}
         columns={columns}
         checkboxSelection
-        onRowSelectionModelChange ={(newSelection) => setRowSelectionModel(newSelection)}
+        onRowSelectionModelChange={(newSelection) => setRowSelectionModel(newSelection)}
         rowSelectionModel={rowSelectionModel}
 
         pageSize={10}
-          pagination
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
+        pagination
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
       />
       {selectedProduct && (
-                <EditProductModal
-                    open={editModalOpen}
-                    handleClose={handleCloseModal}
-                    product={selectedProduct}
-                    handleSave={()=>console.log('save')}
-                />
-            )}
+        <EditProductModal
+          open={editModalOpen}
+          handleClose={handleCloseModal}
+          product={selectedProduct}
+          handleSave={() => console.log('save')}
+        />
+      )}
 
-    {deleteModalOpen && (
+      {deleteModalOpen && (
         <DeleteProductModal
           open={deleteModalOpen}
           handleClose={handleCloseModal}
@@ -185,7 +185,7 @@ const handleCloseModal = () => {
         />
       )}
     </Container>
-    
+
   );
 };
 
