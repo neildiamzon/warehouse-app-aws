@@ -106,9 +106,9 @@ export default function MenuBar({userRole}) {
             
             <Divider />
             <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap'}}>
-                <Link onClick={() => handleOpenModals('aboutDeveloper')} href="#"><a>About the Developer</a></Link>
+                <Link onClick={() => handleOpenModals('aboutDeveloper')} href="#">About the Developer</Link>
                     {openModal === 'aboutDeveloper' && <AboutDeveloper onClose={handleCloseModals} />}
-                <Link onClick={() => handleOpenModals('contactMe')} href="#"><a>Contact Me</a></Link>
+                <Link onClick={() => handleOpenModals('contactMe')} href="#">Contact Me</Link>
                     {openModal === 'contactMe' && <ContactMe onClose={handleCloseModals} />}
             </Box>
             

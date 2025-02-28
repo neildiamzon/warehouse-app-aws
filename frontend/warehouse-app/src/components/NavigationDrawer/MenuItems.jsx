@@ -28,7 +28,8 @@ const menuItems = [
     {
         text: 'Invoices',
         icon: <ReceiptIcon />, // Icon for the menu item
-        roles: ['admin', 'staff'] // Roles that can access this menu item
+        roles: ['admin', 'staff'], // Roles that can access this menu item
+        path: '/dashboard/invoices'
     },
     {
         text: 'My Orders',

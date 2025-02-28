@@ -2,21 +2,37 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 
 import { useNavigate } from "react-router-dom"; 
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   const navigate = useNavigate(); // Initialize the navigate hook
   
   const handleLogin = () => {
-    if (email === 'user@example.com' && password === 'password') {
-      // After successful login, navigate to the dashboard
-      navigate('/dashboard');  // This will redirect the user to the dashboard page
-    } else {
-      alert('Invalid credentials');
-    }
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://localhost:7187/api/authentication/login',
+      headers: {},
+      data: {
+        Username: email,
+        Password: password
+      }
+    };
+
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        navigate('/dashboard', {state: {userRole: response.data.role[0]}});  // This will redirect the user to the dashboard page
+      })
+      .catch((error) => {
+        alert('Invalid email or password');
+        console.log(error);
+      });
   };
   return (
     <Container sx={{ mt: 0, backgroundColor: 'white', p: 9, borderRadius: 6, width: '190%'}}>
