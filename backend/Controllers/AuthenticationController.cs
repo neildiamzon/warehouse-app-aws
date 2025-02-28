@@ -1,5 +1,6 @@
 ﻿using backend.Model;
 using backend.Model.Request;
+using backend.Model.Response;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -45,11 +46,12 @@ namespace backend.Controllers
             }
 
             var userRole = await _userService.GetUserRolesAsync(user);
+            var response = new ResponseLogin {
+                result = "Success",
+                role = userRole
+            };
 
-            return Ok(
-                userRole);
+            return Ok(response);
         }
-
-
     }
 }

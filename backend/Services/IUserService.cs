@@ -10,5 +10,4 @@ namespace backend.Services
         Task<AppUser?> GetUserByNameAsync(string userName);
         Task<SignInResult> LoginAsync(string email, string password);
     }
-
 }
