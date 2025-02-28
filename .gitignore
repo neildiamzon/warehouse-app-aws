@@ -1,0 +1,14 @@
+# Ignore the .vs folder (Visual Studio temp files)
+.vs/
+
+# Ignore build output folders
+bin/
+obj/
+
+# Ignore user-specific files
+.vs2019/
+.idea/
+
+# Ignore ASP.NET Core files
+project.lock.json
+project.fragment.lock.json
