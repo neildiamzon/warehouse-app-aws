@@ -1,5 +1,7 @@
 ﻿using backend.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace backend
 {
@@ -14,7 +16,7 @@ namespace backend
             _roleManager = roleManager;
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(Database.WarehouseDbContext tempDbContext)
         {
             // Define roles
             var roles = new[] { "Admin", "Staff", "Customer" };
@@ -49,6 +51,26 @@ namespace backend
                     // Assign the Admin role to the user
                     await _userManager.AddToRoleAsync(adminUser, "Admin");
                 }
+            }
+
+            // seed data
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "backend.Database.SeedData.sql";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var sql = reader.ReadToEnd();
+
+                    // Execute the SQL script on the database
+                    tempDbContext.Database.ExecuteSqlRaw(sql);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in executing seed data. " + ex);
             }
         }
     }

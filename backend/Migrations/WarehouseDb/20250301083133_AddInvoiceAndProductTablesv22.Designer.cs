@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Database;
 
@@ -11,16 +12,15 @@ using backend.Database;
 namespace backend.Migrations.WarehouseDb
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250301083133_AddInvoiceAndProductTablesv22")]
+    partial class AddInvoiceAndProductTablesv22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -78,6 +78,9 @@ namespace backend.Migrations.WarehouseDb
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InvoiceId")
+                        .IsUnique();
+
                     b.ToTable("Invoices");
                 });
 
@@ -90,6 +93,9 @@ namespace backend.Migrations.WarehouseDb
                     b.Property<string>("ProductCode")
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("product_code");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -107,6 +113,8 @@ namespace backend.Migrations.WarehouseDb
                     b.HasKey("InvoiceId", "ProductCode");
 
                     b.HasIndex("ProductCode");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("InvoiceProducts");
                 });
@@ -165,6 +173,9 @@ namespace backend.Migrations.WarehouseDb
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductCode")
+                        .IsUnique();
+
                     b.ToTable("Products");
                 });
 
@@ -178,11 +189,15 @@ namespace backend.Migrations.WarehouseDb
                         .IsRequired();
 
                     b.HasOne("backend.Model.Product", "Product")
-                        .WithMany("InvoiceProducts")
+                        .WithMany()
                         .HasForeignKey("ProductCode")
                         .HasPrincipalKey("ProductCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("backend.Model.Product", null)
+                        .WithMany("InvoiceProducts")
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Invoice");
 

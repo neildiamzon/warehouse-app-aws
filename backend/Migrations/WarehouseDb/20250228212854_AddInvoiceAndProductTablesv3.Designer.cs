@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Database;
 
@@ -11,19 +12,33 @@ using backend.Database;
 namespace backend.Migrations.WarehouseDb
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228212854_AddInvoiceAndProductTablesv3")]
+    partial class AddInvoiceAndProductTablesv3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("InvoiceProduct", b =>
+                {
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InvoiceId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("InvoiceProducts");
+                });
 
             modelBuilder.Entity("backend.Model.Invoice", b =>
                 {
@@ -44,7 +59,7 @@ namespace backend.Migrations.WarehouseDb
 
                     b.Property<string>("InvoiceId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("invoice_id");
 
                     b.Property<string>("InvoiceReferenceNumber")
@@ -79,36 +94,6 @@ namespace backend.Migrations.WarehouseDb
                     b.HasKey("Id");
 
                     b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("backend.Model.InvoiceProduct", b =>
-                {
-                    b.Property<string>("InvoiceId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("invoice_id");
-
-                    b.Property<string>("ProductCode")
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("product_code");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
-
-                    b.Property<decimal>("TotalPrice")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_price");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("unit_price");
-
-                    b.HasKey("InvoiceId", "ProductCode");
-
-                    b.HasIndex("ProductCode");
-
-                    b.ToTable("InvoiceProducts");
                 });
 
             modelBuilder.Entity("backend.Model.Product", b =>
@@ -168,19 +153,17 @@ namespace backend.Migrations.WarehouseDb
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("backend.Model.InvoiceProduct", b =>
+            modelBuilder.Entity("InvoiceProduct", b =>
                 {
                     b.HasOne("backend.Model.Invoice", "Invoice")
                         .WithMany("InvoiceProducts")
                         .HasForeignKey("InvoiceId")
-                        .HasPrincipalKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("backend.Model.Product", "Product")
                         .WithMany("InvoiceProducts")
-                        .HasForeignKey("ProductCode")
-                        .HasPrincipalKey("ProductCode")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
