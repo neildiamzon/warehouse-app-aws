@@ -4,11 +4,14 @@ import UomComboBox from '../../CustomFields/UomComboBox';
 
 const AddProductModal = ({ open, handleClose, handleSave }) => {
     const [formData, setFormData] = useState({
+        productCode: '',
         name: '',
         description: '',
         price: '',
+        quantityPerUOM: '',
         uom: '',
-        stock_level: ''
+        weight: '',
+        stockLevel: ''
     });
 
     const handleChange = (e) => {
@@ -48,6 +51,15 @@ const AddProductModal = ({ open, handleClose, handleSave }) => {
                 <h2>Add New Product</h2>
                 <TextField
                     label="Product Code"
+                    name="productCode"
+                    value={formData.productCode}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+
+                <TextField
+                    label="Product name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -74,8 +86,29 @@ const AddProductModal = ({ open, handleClose, handleSave }) => {
                     margin="normal"
                 />
 
+                <TextField
+                    label="Weight"
+                    name="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+                
+                <TextField
+                    label="Quantity Per UOM"
+                    name="quantityPerUOM"
+                    type="number"
+                    value={formData.quantityPerUOM}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+
                 <UomComboBox
                     label="Select UOM"
+                    name="uom"
                     value={formData.uom}
                     onChange={handleUomChange}
                     fullWidth
@@ -84,6 +117,7 @@ const AddProductModal = ({ open, handleClose, handleSave }) => {
 
                 <TextField
                     label="Stock Level"
+                    name="stockLevel"
                     type="number"
                     variant="outlined"
                     fullWidth

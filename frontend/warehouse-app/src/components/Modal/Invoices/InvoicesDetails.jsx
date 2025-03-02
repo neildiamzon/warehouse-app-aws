@@ -6,29 +6,41 @@ const productColumns = [
   { field: "product_id", headerName: "Product ID", flex: 1 },
   { field: "name", headerName: "Name", flex: 1 },
   { field: "description", headerName: "Description", flex: 2 },
-  { field: "price", headerName: "Price ($)", flex: 1 },
-  { field: "weight", headerName: "Weight (kg)", flex: 1 },
-  { field: "uom", headerName: "UOM", flex: 1 },
-  { field: "quantity_per_uom", headerName: "Qty/UOM", flex: 1 },
+  { field: "quantity", headerName: "Quantity", flex: 1 },
+  { field: "unit_price", headerName: "Unit Price ($)", flex: 1 },
+  { field: "total_price", headerName: "Total Price ($)", flex: 1 },
 ];
 
 const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
-  const productRows = [
-    { id: 1, product_id: "P001", name: "Item A", description: "Quality item", price: 50, weight: 1.2, uom: "BX", quantity_per_uom: 10 },
-    { id: 2, product_id: "P002", name: "Item B", description: "Durable and strong", price: 75, weight: 2.5, uom: "BX", quantity_per_uom: 20 },
-  ];
+    var rows = [];
+    if (invoice.invoiceProducts) {
+        rows = invoice.invoiceProducts.map((ip, index) => {
+            return {
+                product_id: ip.productCode,
+                name: ip.product.name,
+                description: ip.product.description,
+                quantity: ip.quantity,
+                unit_price: ip.unitPrice,
+                total_price: ip.totalPrice
+            };
+        });
+    }
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ p: 4, bgcolor: "white", width: 1200, mx: "auto", mt: 20, borderRadius: 2 }}>
         <Typography variant="h6">Invoice Details</Typography>
-        <Typography>User ID: {invoice.user_id}</Typography>
-        <Typography>Shipping Address: {invoice.shipping_address}</Typography>
-        <Typography>Total Cost: ${invoice.total_cost}</Typography>
-        <Typography>Shipped: {invoice.shipped}</Typography>
-        <Typography>Invoice Status: {invoice.invoice_status}</Typography>
+        <Typography>User ID: <strong>{invoice.userId}</strong></Typography>
+        <Typography>Shipping Address: <strong>{invoice.shippingAddress}</strong></Typography>
+        <Typography>Total Cost: <strong>${invoice.totalCost}</strong></Typography>
+        <Typography>Shipped: <strong>{invoice.shipped}</strong></Typography>
+        <Typography>Invoice Status: <strong>{invoice.invoiceStatus}</strong></Typography>
         <Box sx={{ height: 300, mt: 2 }}>
-          <DataGrid rows={productRows} columns={productColumns} pageSize={5} />
+          <DataGrid 
+            rows={rows} 
+            columns={productColumns} 
+            pageSize={10} 
+            getRowId={(row) => row.product_id}/>
         </Box>
         <Button onClick={handleClose} variant="contained" sx={{ mt: 2 }}>Close</Button>
       </Box>

@@ -22,10 +22,10 @@ namespace backend.Migrations.WarehouseDb
                     user_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     customer_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     shipping_address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    total_cost = table.Column<float>(type: "real", nullable: false),
-                    shipped = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    total_cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    shipped = table.Column<bool>(type: "bit", nullable: false),
                     invoice_status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,14 +38,15 @@ namespace backend.Migrations.WarehouseDb
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    price = table.Column<float>(type: "real", nullable: false),
+                    product_code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     weight = table.Column<double>(type: "float", nullable: false),
-                    uom = table.Column<int>(type: "int", nullable: false),
-                    QuantityPerUOM = table.Column<int>(type: "int", nullable: false),
-                    StockLevel = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    uom = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    quantity_per_uom = table.Column<int>(type: "int", nullable: false),
+                    stock_level = table.Column<int>(type: "int", nullable: false),
+                    date_created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

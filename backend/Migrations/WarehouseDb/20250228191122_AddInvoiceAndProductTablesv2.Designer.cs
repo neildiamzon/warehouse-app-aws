@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Database;
 
@@ -11,16 +12,15 @@ using backend.Database;
 namespace backend.Migrations.WarehouseDb
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228191122_AddInvoiceAndProductTablesv2")]
+    partial class AddInvoiceAndProductTablesv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,14 +39,12 @@ namespace backend.Migrations.WarehouseDb
                         .HasColumnName("customer_name");
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("date_created")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnName("DateCreated");
 
                     b.Property<string>("InvoiceId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("invoice_id");
 
                     b.Property<string>("InvoiceReferenceNumber")
@@ -83,36 +81,6 @@ namespace backend.Migrations.WarehouseDb
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("backend.Model.InvoiceProduct", b =>
-                {
-                    b.Property<string>("InvoiceId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("invoice_id");
-
-                    b.Property<string>("ProductCode")
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("product_code");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity");
-
-                    b.Property<decimal>("TotalPrice")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_price");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("unit_price");
-
-                    b.HasKey("InvoiceId", "ProductCode");
-
-                    b.HasIndex("ProductCode");
-
-                    b.ToTable("InvoiceProducts");
-                });
-
             modelBuilder.Entity("backend.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -122,10 +90,8 @@ namespace backend.Migrations.WarehouseDb
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("date_created")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnName("date_created");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -170,37 +136,6 @@ namespace backend.Migrations.WarehouseDb
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("backend.Model.InvoiceProduct", b =>
-                {
-                    b.HasOne("backend.Model.Invoice", "Invoice")
-                        .WithMany("InvoiceProducts")
-                        .HasForeignKey("InvoiceId")
-                        .HasPrincipalKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Model.Product", "Product")
-                        .WithMany("InvoiceProducts")
-                        .HasForeignKey("ProductCode")
-                        .HasPrincipalKey("ProductCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Invoice");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("backend.Model.Invoice", b =>
-                {
-                    b.Navigation("InvoiceProducts");
-                });
-
-            modelBuilder.Entity("backend.Model.Product", b =>
-                {
-                    b.Navigation("InvoiceProducts");
                 });
 #pragma warning restore 612, 618
         }

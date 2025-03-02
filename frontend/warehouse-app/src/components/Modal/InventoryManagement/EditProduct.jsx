@@ -4,11 +4,15 @@ import { Modal, Box, TextField, Button } from '@mui/material';
 
 const EditProductModal = ({ open, handleClose, product, handleSave }) => {
     const [formData, setFormData] = useState({
+        id: product.id,
         name: product.name,
         price: product.price,
         description: product.description,
+        quantityPerUOM: product.quantityPerUOM,
         uom: product.uom,
-        stock_level: product.stock_level
+        stockLevel: product.stockLevel,
+        productCode: product.productCode,
+        invoiceProducts: []
     });
     
     const handleChange = (e) => {
@@ -31,11 +35,15 @@ const EditProductModal = ({ open, handleClose, product, handleSave }) => {
     useEffect(() => {
         if (open) {
             setFormData({
+                id: product.id,
                 name: product.name,
                 price: product.price,
                 description: product.description,
+                quantityPerUOM: product.quantityPerUOM,
                 uom: product.uom,
-                stock_level: product.stock_level
+                stockLevel: product.stockLevel,
+                productCode: product.productCode,
+                invoiceProducts: []
             });
         }
     }, [open, product]);
@@ -55,7 +63,7 @@ const EditProductModal = ({ open, handleClose, product, handleSave }) => {
                     p: 4
                 }}
             >
-                <h2>Edit Product</h2>
+                <h2>Edit Product ({product.productCode})</h2>
                 <TextField
                     label="Name"
                     name="name"
@@ -84,6 +92,26 @@ const EditProductModal = ({ open, handleClose, product, handleSave }) => {
                     margin="normal"
                 />
 
+                <TextField
+                    label="Weight"
+                    name="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+
+                <TextField
+                    label="Quantity Per UOM"
+                    name="quantityPerUOM"
+                    type="number"
+                    value={formData.quantityPerUOM}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                />
+
                 <UomComboBox
                     label="Select UOM"
                     value={formData.uom}
@@ -94,12 +122,12 @@ const EditProductModal = ({ open, handleClose, product, handleSave }) => {
 
                 <TextField
                     label="Adjust Stock Level"
-                    name="stock_level"
+                    name="stockLevel"
                     type="number"
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={formData.stock_level}
+                    value={formData.stockLevel}
                     onChange={handleChange}
                 />
                 <Box>

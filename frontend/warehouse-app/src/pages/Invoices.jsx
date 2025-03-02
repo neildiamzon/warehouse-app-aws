@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Container, TextField, MenuItem, Typography, Button, Box, Link } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import InvoiceDetailsModal from "../components/Modal/Invoices/InvoicesDetails";
+import RefreshIcon from "@mui/icons-material/Refresh";
+
+import axios from "axios";
 
 const columns = [
   { 
-    field: "invoice_id",
+    field: "invoiceId",
     headerName: "Invoice ID",
     flex: 1,
     renderCell: (params) => (
@@ -17,34 +20,32 @@ const columns = [
       </span>
     ),
   },
-  { field: "invoice_reference_number", headerName: "Reference No. ", flex: 1 },
-  { field: "user_id", headerName: "User ID", flex: 1 },
-  { field: "customer_name", headerName: "Name", flex: 1 },
-  { field: "shipping_address", headerName: "Shipping Address", flex: 2 },
-  { field: "total_cost", headerName: "Total Cost ($)", type: "number", flex: 1 },
+  { field: "invoiceReferenceNumber", headerName: "Reference No. ", flex: 1 },
+  { field: "userId", headerName: "User ID", flex: 1 },
+  { field: "customerName", headerName: "Name", flex: 1 },
+  { field: "shippingAddress", headerName: "Shipping Address", flex: 2 },
+  { field: "totalCost", headerName: "Total Cost ($)", type: "number", flex: 1 },
   { field: "shipped", headerName: "Shipped", flex: 1 },
-  { field: "invoice_status", headerName: "Invoice Status", flex: 1 }
-];
-
-const rows = [
-  { id: 1, invoice_id: "INV-1001", invoice_reference_number: 'PO001', user_id: "U-001", customer_name: 'Lindor', shipping_address: "123 Street, City", total_cost: 250, shipped: "Y", invoice_status: "Paid" },
-  { id: 2, invoice_id: "INV-1002", invoice_reference_number: 'PO002', user_id: "U-002", customer_name: 'Gary',shipping_address: "456 Avenue, City", total_cost: 150, shipped: "N", invoice_status: "Awaiting Payment" },
-  { id: 3, invoice_id: "INV-1003", invoice_reference_number: 'PO003', user_id: "U-003", customer_name: 'Martin Yu',shipping_address: "789 Boulevard, City", total_cost: 300, shipped: "N", invoice_status: "Draft" }
+  { field: "invoiceStatus", headerName: "Invoice Status", flex: 1 },
+  { field: "dateCreated", headerName: "Date Created", flex: 1 }
 ];
 
 const InvoiceManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchColumn, setSearchColumn] = useState("invoice_id");
+  const [searchColumn, setSearchColumn] = useState("invoiceId");
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 });
+  const [invoices, setInvoices] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
 
-  const filteredRows = rows.filter((row) =>
-    row[searchColumn]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRows = invoices.filter((invoices) =>
+    invoices[searchColumn]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleOpenModal = (invoice) => {
+    console.log(invoice)
     setSelectedInvoice(invoice);
     setModalOpen(true);
   };
@@ -52,6 +53,27 @@ const InvoiceManagement = () => {
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedInvoice(null);
+  };
+
+  const handleGetInvoices = () => {
+    setLoading(true);
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://localhost:7187/api/Invoices`, // how to add the search term here?
+      headers: {},
+    };
+
+    axios.request(config)
+      .then((response) => {
+        setInvoices(response.data);
+      })
+      .catch((error) => {
+        alert('Error has occurred');
+        console.log(error);
+      }).finally(() => {
+        setLoading(false); // Hide loading state
+      });
   };
 
   return (
@@ -81,6 +103,14 @@ const InvoiceManagement = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 300 }}
           />
+          <Button
+            variant="contained"
+            startIcon={<RefreshIcon />}
+            onClick={() => handleGetInvoices()}
+            sx={{ ml: 2 }}
+          >
+            Refresh
+          </Button>
         </Box>
       </Box>
       <DataGrid
@@ -89,6 +119,9 @@ const InvoiceManagement = () => {
         pageSizeOptions={[5, 10]}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        loading={loading} 
+        getRowId={(row) => row.invoiceId}
+        localeText={{noRowsLabel: 'Please click refresh to load data'}}
       />
       {selectedInvoice && (
         <InvoiceDetailsModal open={modalOpen} handleClose={handleCloseModal} invoice={selectedInvoice} />

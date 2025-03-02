@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Database;
 
@@ -11,9 +12,11 @@ using backend.Database;
 namespace backend.Migrations.WarehouseDb
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250301094504_AddInvoiceAndProductTablesv25")]
+    partial class AddInvoiceAndProductTablesv25
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,8 @@ namespace backend.Migrations.WarehouseDb
                         .HasColumnName("customer_name");
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("date_created")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnName("DateCreated");
 
                     b.Property<string>("InvoiceId")
                         .IsRequired()
@@ -122,10 +123,8 @@ namespace backend.Migrations.WarehouseDb
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("date_created")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnName("date_created");
 
                     b.Property<string>("Description")
                         .IsRequired()

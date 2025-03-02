@@ -12,7 +12,7 @@ using backend.Database;
 namespace backend.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20250228073453_AddUsersTables")]
+    [Migration("20250228190459_AddUsersTables")]
     partial class AddUsersTables
     {
         /// <inheritdoc />

@@ -1,6 +1,7 @@
 using backend;
 using backend.Database;
 using backend.Model;
+using backend.Repositories;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +21,20 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; 
+    });
+            ;
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInventoryManagementService, InventoryManagementService>();
+builder.Services.AddScoped<IInventoryManagementRepository, InventoryManagementRepository>();
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -47,11 +60,12 @@ var app = builder.Build();
 
 app.UseCors("AllowReactApp");
 
-// Initialize roles and admin user
+// Initialize roles and admin user and seed data
 using (var scope = app.Services.CreateScope())
 {
     var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-    await initializer.InitializeAsync();
+    var tempDbContext = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();
+    await initializer.InitializeAsync(tempDbContext);
 }
 
 // Configure the HTTP request pipeline.
