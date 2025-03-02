@@ -3,10 +3,11 @@ import { TextField, MenuItem } from '@mui/material';
 
 const UomComboBox = ({ label, value, onChange }) => {
     const options = [
-        { label: 'BX', value: 'BX' },
-        { label: 'BIB', value: 'BIB' },
-        { label: 'JAR', value: 'JAR' },
-        { label: 'BOT', value: 'BOT' },
+        { label: 'BX', value: 'box' },
+        { label: 'KG', value: 'kg' },
+        { label: 'PC', value: 'piece' },
+        { label: 'PK', value: 'pack' },
+        { label: 'LT', value: 'liters' },
     ];
 
     return (

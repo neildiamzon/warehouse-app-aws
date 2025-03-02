@@ -11,41 +11,31 @@ import { DataGrid } from "@mui/x-data-grid";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import EditProductModal from "../components/Modal/InventoryManagement/EditProduct";
 import DeleteProductModal from "../components/Modal/InventoryManagement/DeleteProduct";
 import AddProductModal from "../components/Modal/InventoryManagement/NewProduct";
 
+import axios from "axios";
+
 const columns = [
-  { field: "name", headerName: "Product Code", flex: 1 },
+  { field: "name", headerName: "Product Name", flex: 1 },
   { field: "description", headerName: "Description", flex: 2 },
   { field: "price", headerName: "Price ($)", type: "number", flex: 1 },
   { field: "weight", headerName: "Weight (kg)", type: "number", flex: 1 },
   { field: "uom", headerName: "UOM", flex: 1 },
-  { field: "quantity_per_uom", headerName: "Qty/UOM", type: "number", flex: 1 },
-  { field: "stock_level", headerName: "Stock Level", type: "number", flex: 1 },
-];
-
-const initialRows = [
-  { id: 1, name: "Product A", description: "High-quality product", price: 99, weight: 1.2, uom: "BX", quantity_per_uom: 10, stock_level: 50 },
-  { id: 2, name: "Product B", description: "Affordable and durable", price: 149, weight: 2.5, uom: "BX", quantity_per_uom: 20, stock_level: 30 },
-  { id: 3, name: "Product C", description: "Best-selling item", price: 199, weight: 3.0, uom: "BOT", quantity_per_uom: 1, stock_level: 80 },
-  { id: 4, name: "Product D", description: "Eco-friendly", price: 79, weight: 0.8, uom: "BIB", quantity_per_uom: 5, stock_level: 40 },
-  { id: 5, name: "Product E", description: "Lightweight and durable", price: 129, weight: 1.5, uom: "BX", quantity_per_uom: 15, stock_level: 20 },
-  { id: 6, name: "Product F", description: "Water-resistant", price: 89, weight: 2.2, uom: "BX", quantity_per_uom: 8, stock_level: 35 },
-  { id: 7, name: "Product G", description: "Premium quality", price: 229, weight: 4.0, uom: "BOT", quantity_per_uom: 1, stock_level: 25 },
-  { id: 8, name: "Product H", description: "Compact and efficient", price: 109, weight: 1.0, uom: "BIB", quantity_per_uom: 3, stock_level: 60 },
-  { id: 9, name: "Product I", description: "Stainless steel", price: 159, weight: 3.5, uom: "BX", quantity_per_uom: 12, stock_level: 10 },
-  { id: 10, name: "Product J", description: "Long-lasting", price: 189, weight: 2.8, uom: "BX", quantity_per_uom: 6, stock_level: 15 },
-  { id: 11, name: "Product K", description: "Light and strong", price: 99, weight: 1.8, uom: "BOT", quantity_per_uom: 1, stock_level: 45 },
-  { id: 12, name: "Product K", description: "Light and strong", price: 99, weight: 1.8, uom: "BOT", quantity_per_uom: 1, stock_level: 45 },
-
+  { field: "quantityPerUOM", headerName: "Qty/UOM", type: "number", flex: 1 },
+  { field: "stockLevel", headerName: "Stock Level", type: "number", flex: 1 },
+  { field: "dateCreated", headerName: "Date Created", flex: 1 }
 ];
 
 const InventoryManagement = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchColumn, setSearchColumn] = useState("name");
@@ -57,14 +47,14 @@ const InventoryManagement = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const selectedProducts = initialRows.filter((row) => rowSelectionModel.includes(row.id));
+  const selectedProducts = products.filter((row) => rowSelectionModel.includes(row.id));
 
-  const filteredRows = initialRows.filter((row) =>
+  const filteredRows = products.filter((row) =>
     row[searchColumn]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleEditProduct = () => {
-    const product = initialRows.find(row => row.id === rowSelectionModel[0]);
+    const product = products.find(row => row.id === rowSelectionModel[0]);
 
     console.log(product);
     setSelectedProduct(product);
@@ -74,20 +64,122 @@ const InventoryManagement = () => {
   }
 
   const handleDeleteProduct = () => {
-    console.log(`Delete product with ${rowSelectionModel.join(', ')}`);
     setDeleteModalOpen(true);
+  }
+
+  const handleConfirmDeleteProduct = () => {
+    console.log(`Delete product with ${rowSelectionModel}`);
+
+    const selectedProducts = rowSelectionModel.map(selectedId => 
+      products.find(row => row.id === selectedId)
+    );
+
+    const validProducts = selectedProducts.filter(product => product !== undefined && product !== null);
+
+    const requestBody = validProducts.map(product => ({
+      ProductId: product.id,
+      ProductCode: product.productCode
+    }));
+
+    let config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: 'https://localhost:7187/api/InventoryManagement/DeleteProducts',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : requestBody
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    setDeleteModalOpen(false);
+    handleGetProducts();
+  }
+
+  const handleSaveEditProduct = (updatedProduct) => {
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: 'https://localhost:7187/api/InventoryManagement',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : updatedProduct
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    setEditModalOpen(false);
+    handleGetProducts();
+  }
+
+  const handleSaveNewProduct = (newProduct) => {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://localhost:7187/api/InventoryManagement',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : newProduct
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+    setAddModalOpen(false);
+    handleGetProducts();
   }
 
   const handleAddProduct = () => {
     setAddModalOpen(true);
   }
 
-
   const handleCloseModal = () => {
     setEditModalOpen(false);
     setDeleteModalOpen(false);
     setAddModalOpen(false);
   };
+
+  const handleGetProducts = () => {
+    setLoading(true);
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://localhost:7187/api/InventoryManagement`, // how to add the search term here?
+      headers: {},
+    };
+
+    axios.request(config)
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        alert('Error has occurred');
+        console.log(error);
+      }).finally(() => {
+        setLoading(false); // Hide loading state
+      });
+  };
+
 
   return (
     <Container sx={{ mt: 2, width: "160%" }}>
@@ -117,6 +209,16 @@ const InventoryManagement = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ width: 300 }}
           />
+          
+          <Button
+            id="refresh-button"
+            variant="contained"
+            startIcon={<RefreshIcon />}
+            onClick={() => handleGetProducts()}
+            sx={{ ml: 2 }}
+          >
+            Refresh
+          </Button>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
@@ -154,7 +256,8 @@ const InventoryManagement = () => {
         checkboxSelection
         onRowSelectionModelChange={(newSelection) => setRowSelectionModel(newSelection)}
         rowSelectionModel={rowSelectionModel}
-
+        loading={loading}
+        localeText={{noRowsLabel: 'Please click refresh to load data'}}
         pageSize={10}
         pagination
         paginationModel={paginationModel}
@@ -165,7 +268,7 @@ const InventoryManagement = () => {
           open={editModalOpen}
           handleClose={handleCloseModal}
           product={selectedProduct}
-          handleSave={() => console.log('save')}
+          handleSave={handleSaveEditProduct}
         />
       )}
 
@@ -174,14 +277,14 @@ const InventoryManagement = () => {
           open={deleteModalOpen}
           handleClose={handleCloseModal}
           selectedProducts={selectedProducts}
-          handleDelete={handleDeleteProduct}
+          handleDelete={handleConfirmDeleteProduct}
         />
       )}
       {addModalOpen && (
         <AddProductModal
           open={addModalOpen}
           handleClose={handleCloseModal}
-          handleDelete={handleDeleteProduct}
+          handleSave={handleSaveNewProduct}
         />
       )}
     </Container>

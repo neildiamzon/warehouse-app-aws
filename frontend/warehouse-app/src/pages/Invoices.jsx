@@ -121,6 +121,7 @@ const InvoiceManagement = () => {
         onPaginationModelChange={setPaginationModel}
         loading={loading} 
         getRowId={(row) => row.invoiceId}
+        localeText={{noRowsLabel: 'Please click refresh to load data'}}
       />
       {selectedInvoice && (
         <InvoiceDetailsModal open={modalOpen} handleClose={handleCloseModal} invoice={selectedInvoice} />
