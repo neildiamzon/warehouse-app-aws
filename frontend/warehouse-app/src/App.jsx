@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import InventoryManagement from "./pages/InventoryManagement"
 import Invoices from "./pages/Invoices"
+import RegistrationForm from './pages/Registration';
 
 function App() {
   const isAuthenticated = true
@@ -16,6 +17,7 @@ function App() {
             <Route path="inventory-management" element={<InventoryManagement />} />
             <Route path="invoices" element={<Invoices />} />
           </Route>
+          <Route path="/registration" element={<RegistrationForm />} />
         </Routes>
     </Router>
   )

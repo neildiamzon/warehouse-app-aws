@@ -33,11 +33,9 @@ export default function MenuBar({userRole}) {
 
     const handleMenuClick = (key, path) => {
         if (key === "Logout") {
-            localStorage.removeItem("token"); // Remove authentication token
-            navigate('/login'); // Navigate to the login page
+            navigate('/login');
         }
         console.log(path)
-        //navigate(path); // Navigate to the respective page
       };
     const navigate = useNavigate();
     return (
