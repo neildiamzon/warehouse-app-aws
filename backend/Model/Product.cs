@@ -53,6 +53,6 @@ namespace backend.Model
 
         [JsonIgnore]
         // Navigation property for the InvoiceProducts join table
-        public virtual ICollection<InvoiceProduct> InvoiceProducts { get; set; }
+        public virtual ICollection<InvoiceProduct> InvoiceProducts { get; set; } = new List<InvoiceProduct>();
     }
 }

@@ -20,6 +20,14 @@ namespace backend.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>()
+                .Property(p => p.DateCreated)
+                .HasDefaultValueSql("GETDATE()"); // For SQL Server
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.DateCreated)
+                .HasDefaultValueSql("GETDATE()"); // For SQL Server
+
             // Composite Key configuration
             modelBuilder.Entity<InvoiceProduct>()
                 .HasKey(ip => new { ip.InvoiceId, ip.ProductCode });

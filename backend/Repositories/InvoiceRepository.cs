@@ -1,11 +1,6 @@
 ﻿using backend.Database;
 using backend.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 public class InvoiceRepository : IInvoiceRepository
 {
     private readonly WarehouseDbContext _context;

@@ -1,7 +1,5 @@
-﻿using backend.Database;
-using backend.Model;
+﻿using backend.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]

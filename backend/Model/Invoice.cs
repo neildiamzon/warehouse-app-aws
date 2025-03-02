@@ -44,7 +44,7 @@ namespace backend.Model
         [Column("invoice_status")]
         public string InvoiceStatus { get; set; }
 
-        [Column("DateCreated")]
+        [Column("date_created")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         // Navigation property for the InvoiceProducts join table

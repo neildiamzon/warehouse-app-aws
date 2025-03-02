@@ -2,7 +2,7 @@
 
 INSERT INTO [dbo].[Invoices] 
     ([invoice_id], [invoice_reference_number], [user_id], [customer_name], 
-     [shipping_address], [total_cost], [shipped], [invoice_status], [DateCreated])
+     [shipping_address], [total_cost], [shipped], [invoice_status], [date_created])
 VALUES
     ('INV-001', 'REF-001', 'USR-1001', 'John Doe', '123 Elm St, Wellington, NZ', 130.50, 'No', 'Pending', GETDATE()),
     ('INV-002', 'REF-002', 'USR-1002', 'Jane Smith', '45 High St, Auckland, NZ', 91.00, 'Yes', 'Shipped', GETDATE()),
