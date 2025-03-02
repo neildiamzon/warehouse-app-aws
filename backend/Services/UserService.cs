@@ -1,4 +1,5 @@
 ﻿using backend.Model;
+using backend.Model.Request;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
 
@@ -39,6 +40,19 @@ public class UserService : IUserService
 
         // Authenticate user using SignInManager
         return await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: false);
+    }
+
+    public async Task<string> AddUserAsync(RequestCustomerRegistration newCustomer)
+    {
+        var createCustomerResult = await _userManager.CreateAsync(newCustomer, newCustomer.Password);
+        Console.WriteLine(createCustomerResult);
+        if (createCustomerResult.Succeeded) {
+            await _userManager.AddToRoleAsync(newCustomer, "Customer");
+            return "Success";
+        } 
+
+        return "Failed";
+        
     }
 
 }

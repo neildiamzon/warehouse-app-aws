@@ -8,12 +8,12 @@ import RegistrationForm from './pages/Registration';
 
 function App() {
   const isAuthenticated = true
-
+  localStorage.removeItem("role");
   return (
     <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard/*" element={isAuthenticated ? <Dashboard userRole={'admin'} /> : <Login/>}>
+          <Route path="/dashboard/*" element={isAuthenticated ? <Dashboard /> : <Login/>}>
             <Route path="inventory-management" element={<InventoryManagement />} />
             <Route path="invoices" element={<Invoices />} />
           </Route>

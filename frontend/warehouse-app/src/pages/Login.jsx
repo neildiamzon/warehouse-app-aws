@@ -37,7 +37,9 @@ const handleCloseModals = () => {
     axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        navigate('/dashboard', {state: {userRole: response.data.role[0]}});  // This will redirect the user to the dashboard page
+        var _role = response.data.role[0];
+        localStorage.setItem('role', _role);
+        navigate('/dashboard');  // This will redirect the user to the dashboard page
       })
       .catch((error) => {
         alert('Invalid email or password');

@@ -53,5 +53,12 @@ namespace backend.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("registration")]
+        public async Task<IActionResult> Register([FromBody] RequestCustomerRegistration newCustomer)
+        {
+            Console.WriteLine(newCustomer);
+            return Ok(await _userService.AddUserAsync(newCustomer));
+        }
     }
 }

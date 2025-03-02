@@ -17,35 +17,30 @@ const menuItems = [
     {
         text: 'All Products',
         icon: <InventoryIcon />,
-        roles: [ 'user']
+        roles: [ 'Customer']
     },
     {
         text: 'Inventory Management',
         icon: <InventoryIcon />,
-        roles: ['admin', 'staff'],
+        roles: ['Admin', 'Staff'],
         path: '/dashboard/inventory-management'
     },
     {
         text: 'Invoices',
         icon: <ReceiptIcon />, // Icon for the menu item
-        roles: ['admin', 'staff'], // Roles that can access this menu item
+        roles: ['Admin', 'staff'], // Roles that can access this menu item
         path: '/dashboard/invoices'
     },
     {
         text: 'My Orders',
         icon: <ShoppingCartIcon />,
-        roles: ['user'],
-        children: [
-            { key: 'view-invoices', text: 'View Invoices', path: '/my-orders/view', icon: <ListAltIcon />, roles: ['user'] },
-            { key: 'new-orders', text: 'Add New Order', path: '/my-orders/add', icon: <AddShoppingCartIcon />, roles: ['user'] },
-            { key: 'edit-orders', text: 'Edit Orders', path: '/my-orders/edit', icon: <EditIcon />, roles: ['user'] }
-        ]
+        roles: ['Customer']
     },
     
     {
         text: 'User Management',
         icon: <PersonIcon />,
-        roles: ['admin', 'staff']
+        roles: ['Admin', 'staff']
     }
 ];
 
