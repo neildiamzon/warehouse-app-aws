@@ -15,15 +15,16 @@ const Dashboard = () => {
             <MenuBar userRole={userRole} />
             <HeaderBar userRole={userRole} />
             <Box className="main-container" 
-                sx={{ 
-                    display: "flex", 
+                sx={{
+                    display: "flex",
                     flexDirection: "column",
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: { xs: "90%", sm: "80%", md: "60%", lg: "50%" }}
-                }>
+                    flexGrow: 1,  // Make sure it takes up available space
+                    paddingTop: "20px", // Adjust space below the header
+                    paddingLeft: "16px",
+                    paddingRight: "16px",
+                    paddingBottom: "16px",
+                    overflowY: "auto",  // Allow scrolling if content overflows
+                }}>
                 <main className="content">
                     <Outlet/>
                 </main>

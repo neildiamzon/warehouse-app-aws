@@ -33,12 +33,13 @@ const handleCloseModals = () => {
         Password: password
       }
     };
-
+    
     axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
         var _role = response.data.role[0];
         localStorage.setItem('role', _role);
+        localStorage.setItem('email', email);
         navigate('/dashboard');  // This will redirect the user to the dashboard page
       })
       .catch((error) => {

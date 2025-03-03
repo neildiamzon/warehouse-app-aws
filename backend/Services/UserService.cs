@@ -19,11 +19,6 @@ public class UserService : IUserService
         return await _userManager.FindByIdAsync(userId);
     }
 
-    public async Task<AppUser?> getUserByEmail(string userName)
-    {
-        return await _userManager.FindByNameAsync(userName);
-    }
-
     public async Task<List<string>> GetUserRolesAsync(AppUser user)
     {
         return (await _userManager.GetRolesAsync(user)).ToList();
@@ -54,6 +49,8 @@ public class UserService : IUserService
 
     public async Task<string> AddUserAsync(RequestCustomerRegistration newCustomer)
     {
+        newCustomer.UserId = String.Concat(newCustomer.UserName, '_', newCustomer.Organization);
+
         var createCustomerResult = await _userManager.CreateAsync(newCustomer, newCustomer.Password);
         Console.WriteLine(createCustomerResult);
         if (createCustomerResult.Succeeded) {
@@ -65,13 +62,27 @@ public class UserService : IUserService
         
     }
 
-    public Task<List<string>> GetUserRolesAsync(string userName)
+    public async Task<Customer?> GetCustomerByEmail(string email)
     {
-        throw new NotImplementedException();
-    }
+        var user = await _userManager.FindByEmailAsync(email);
 
-    public Task<AppUser?> GetUserByNameAsync(string userName)
-    {
-        throw new NotImplementedException();
+        if (user is not Customer customer)
+        {
+            return null;
+        };
+
+        var retCustomer = new Customer
+        {
+            CustomerId = customer.Id,
+            UserId = customer.Id,
+            Email = customer.Email,
+            ShippingAddress = customer.ShippingAddress,
+            ContactPerson = customer.ContactPerson,
+            ContactPersonEmail = customer.ContactPersonEmail,
+            Organization = customer.Organization,
+            PhoneNumber = user.PhoneNumber ?? "",
+            CustomerName = customer.CustomerName
+        };
+        return retCustomer;
     }
 }

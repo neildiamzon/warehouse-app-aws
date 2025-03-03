@@ -5,6 +5,8 @@ import Dashboard from './pages/Dashboard'
 import InventoryManagement from "./pages/InventoryManagement"
 import Invoices from "./pages/Invoices"
 import RegistrationForm from './pages/Registration';
+import ViewProfile from './pages/Profile';
+import AddOrders from './pages/AddOrders';
 
 function App() {
   const isAuthenticated = true
@@ -16,6 +18,8 @@ function App() {
           <Route path="/dashboard/*" element={isAuthenticated ? <Dashboard /> : <Login/>}>
             <Route path="inventory-management" element={<InventoryManagement />} />
             <Route path="invoices" element={<Invoices />} />
+            <Route path="profile" element={<ViewProfile />} />
+            <Route path="add-order" element={<AddOrders />} />
           </Route>
           <Route path="/registration" element={<RegistrationForm />} />
         </Routes>

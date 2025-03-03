@@ -32,6 +32,10 @@ export default function MenuBar({userRole}) {
     };
 
     const handleMenuClick = (key, path) => {
+        
+        if (key === "profile") {
+            navigate('/dashboard/profile');
+        }
         if (key === "Logout") {
             navigate('/login');
         }

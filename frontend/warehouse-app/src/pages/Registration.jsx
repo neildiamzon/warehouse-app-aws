@@ -10,10 +10,13 @@ import {
   Box
 } from '@mui/material';
 import { Link , useNavigate} from 'react-router-dom';
+import axios from "axios";
 
 const RegistrationForm = () => {
     const navigate = useNavigate(); // Initialize the navigate hook
   const [formData, setFormData] = useState({
+    userName: '',
+    email: '',
     customerId: '',
     customerName: '',
     contactPerson: '',
@@ -34,13 +37,34 @@ const RegistrationForm = () => {
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
+  const submitForm = (formData) => {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://localhost:7187/api/authentication/registration',
+      data : formData
+    };
+
+    axios.request(config)
+    .then((response) => {
+      alert("Registration successful!");
+      navigate('/login');
+    })
+    .catch((error) => {
+      console.log(error);
+      alert("Registration failed. Please try again. (Username might be taken)");
+    });
+  }
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Simple validation
     let validationErrors = {};
-    if (!formData.customerId) validationErrors.customerId = "Customer ID is required";
+    
+    if (!formData.userName) validationErrors.userName = "Username is required";
+    if (!formData.email) validationErrors.email = "E-mail is required";
     if (!formData.customerName) validationErrors.customerName = "Customer Name is required";
     if (!formData.contactPerson) validationErrors.contactPerson = "Contact Person is required";
     if (!formData.shippingAddress) validationErrors.shippingAddress = "Shipping Address is required";
@@ -54,9 +78,13 @@ const RegistrationForm = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+
+      // Submit the form data to the server
+
+      submitForm(formData);
       console.log("Form Data Submitted: ", formData);
-      alert("Registration successful!");
-      navigate('/login');
+        
+
     }
   };
 
@@ -71,20 +99,33 @@ const RegistrationForm = () => {
       <form onSubmit={handleSubmit}>
           <Grid2 item xs={12} marginBottom={2}>
             <TextField
-              label="Customer ID"
-              name="customerId"
+              label="Your Username"
+              name="userName"
               fullWidth
               variant="outlined"
-              value={formData.customerId}
+              value={formData.userName}
               onChange={handleChange}
-              error={!!errors.customerId}
-              helperText={errors.customerId}
+              error={!!errors.userName}
+              helperText={errors.userName}
             />
           </Grid2>
 
           <Grid2 item xs={12} marginBottom={2}>
             <TextField
-              label="Customer Name"
+              label="Your login e-mail address"
+              name="email"
+              fullWidth
+              variant="outlined"
+              value={formData.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+            />
+          </Grid2>
+
+          <Grid2 item xs={12} marginBottom={2}>
+            <TextField
+              label="Your Name"
               name="customerName"
               fullWidth
               variant="outlined"

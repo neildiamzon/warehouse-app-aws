@@ -48,6 +48,14 @@ namespace backend.Controllers
             return Ok(response);
         }
 
+        [HttpPost("/api/user-details")]
+        public async Task<ActionResult<AppUser>> GetCustomerDetails([FromBody] RequestLogin email)
+        {
+            var foundCustomer = await _userService.GetCustomerByEmail(email.Username);
+            
+            return Ok(foundCustomer);
+        }
+
         [HttpPost("registration")]
         public async Task<IActionResult> Register([FromBody] RequestCustomerRegistration newCustomer)
         {
