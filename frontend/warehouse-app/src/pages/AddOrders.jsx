@@ -58,6 +58,47 @@ const AddOrders = () => {
         }
     ];
 
+    const generateInvoice = () => {
+        // Create the invoice object
+        const invoice = {
+            id: 0,
+            invoiceId: 'INV-12345',
+            invoiceReferenceNumber: 'REF-12345',
+            userId: 'user-123',
+            customerName: 'John Doe',
+            shippingAddress: '123 Main Street',
+            totalCost: cart.reduce((total, item) => total + item.price * item.quantity, 0),
+            shipped: 'No', // or 'Yes' depending on the order status
+            invoiceStatus: 'Pending', // or any relevant status
+            dateCreated: new Date().toISOString(),
+            invoiceProducts: cart.map(item => ({
+                productCode: item.productCode,
+                quantity: item.quantity,
+                unitPrice: item.price,
+                invoice: 'INV-12345', // This should correspond to the actual invoice ID
+                product: {
+                    id: item.id,
+                    productCode: item.productCode,
+                    name: item.name,
+                    description: item.description || 'Product description not available',
+                    price: item.price,
+                    weight: item.weight || 0,
+                    uom: item.uom || 'unit',
+                    quantityPerUOM: item.quantityPerUOM || 1,
+                    stockLevel: item.stockLevel,
+                    dateCreated: new Date().toISOString()
+                }
+            }))
+        };
+    
+        // Now you can send this `invoice` object to the backend
+        console.log('Generated Invoice:', invoice);
+    
+        // Example: send the invoice to the backend via an API call
+        // axios.post('/api/invoices', invoice);
+    };
+    
+
     // Handle row selection from the orders grid
     const handleOrderSelection = (selectionModel) => {
         console.log("Selection Model:", selectionModel);  // Log the selected rows' IDs

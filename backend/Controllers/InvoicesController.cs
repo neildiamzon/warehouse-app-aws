@@ -32,4 +32,15 @@ public class InvoicesController : ControllerBase
 
         return invoice;
     }
+
+    [HttpPost("/api/new-order")]
+    public async Task<IActionResult> CreateNewInvoice([FromBody] Invoice invoice)
+    {
+
+        if (invoice == null)
+        {
+            return BadRequest();
+        }
+        return Ok("Order Success");
+    }
 }
