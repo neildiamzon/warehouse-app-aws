@@ -19,7 +19,7 @@ public class UserService : IUserService
         return await _userManager.FindByIdAsync(userId);
     }
 
-    public async Task<AppUser?> GetUserByNameAsync(string userName)
+    public async Task<AppUser?> getUserByEmail(string userName)
     {
         return await _userManager.FindByNameAsync(userName);
     }
@@ -29,17 +29,27 @@ public class UserService : IUserService
         return (await _userManager.GetRolesAsync(user)).ToList();
     }
 
-    public async Task<SignInResult> LoginAsync(string email, string password)
+    public async Task<AppUser?> LoginAsync(string email, string password)
     {
         // Find user by email
+
         var user = await _userManager.FindByEmailAsync(email);
+        
         if (user == null)
         {
-            return SignInResult.Failed;
+            return null;
         }
 
-        // Authenticate user using SignInManager
-        return await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: false);
+        var loginResult = await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: false);
+
+        if (loginResult.Succeeded)
+        {
+            return user;
+        } else
+        {
+            return null;
+        }
+
     }
 
     public async Task<string> AddUserAsync(RequestCustomerRegistration newCustomer)
@@ -55,4 +65,13 @@ public class UserService : IUserService
         
     }
 
+    public Task<List<string>> GetUserRolesAsync(string userName)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<AppUser?> GetUserByNameAsync(string userName)
+    {
+        throw new NotImplementedException();
+    }
 }
