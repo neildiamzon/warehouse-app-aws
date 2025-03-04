@@ -1,6 +1,7 @@
 ﻿using backend.Database;
 using backend.Model;
-using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
+
 public class InvoiceRepository : IInvoiceRepository
 {
     private readonly WarehouseDbContext _context;
@@ -47,5 +48,26 @@ public class InvoiceRepository : IInvoiceRepository
     public async Task<Invoice> GetInvoiceByInvoiceReferenceNumberAsync(string invoiceReferenceNumber)
     {
        return await _context.Invoices.FirstOrDefaultAsync(i => i.InvoiceReferenceNumber == invoiceReferenceNumber);
+    }
+
+    public async Task<bool> CreateInvoiceAndInvoiceProduct(Invoice inv, List<InvoiceProduct> processedIPs)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _context.Invoices.AddAsync(inv); 
+            await _context.InvoiceProducts.AddRangeAsync(processedIPs); // Bulk insert InvoiceProducts
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync(); // Commit if all inserts succeed
+            return true;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync(); // Rollback everything on error
+            Console.WriteLine($"Transaction failed: {ex.Message}");
+            return false;
+        }
     }
 }

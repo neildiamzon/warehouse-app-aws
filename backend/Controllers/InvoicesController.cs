@@ -1,4 +1,5 @@
 ﻿using backend.Model;
+using backend.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -33,14 +34,17 @@ public class InvoicesController : ControllerBase
         return invoice;
     }
 
+    // POST: /api/new-order
     [HttpPost("/api/new-order")]
-    public async Task<IActionResult> CreateNewInvoice([FromBody] Invoice invoice)
+    public async Task<IActionResult> CreateNewInvoice([FromBody] List<RequestOrderProduct> ips)
     {
-
-        if (invoice == null)
+        if (ips == null || !Request.Headers.TryGetValue("email", out var userEmail))
         {
             return BadRequest();
         }
+
+        bool isSuccess = await _invoiceService.CreateNewInvoice(ips, userEmail);
+
         return Ok("Order Success");
     }
 }

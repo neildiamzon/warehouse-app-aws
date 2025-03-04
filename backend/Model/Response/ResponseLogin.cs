@@ -5,6 +5,5 @@ namespace backend.Model.Response
     {
         public string result { get; set; }
         public IEnumerable<string> role { get; set; }
-
     }
 }

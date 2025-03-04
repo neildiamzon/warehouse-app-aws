@@ -8,4 +8,5 @@ public interface IInvoiceRepository
     Task UpdateInvoiceAsync(Invoice invoice);
     Task DeleteInvoiceAsync(Guid id);
     Task<Invoice> GetInvoiceByInvoiceReferenceNumberAsync(string invoiceReferenceNumber);
+    Task<bool> CreateInvoiceAndInvoiceProduct(Invoice inv, List<InvoiceProduct> processedIPs);
 }

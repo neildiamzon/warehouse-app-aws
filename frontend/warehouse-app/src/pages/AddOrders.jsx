@@ -15,7 +15,7 @@ const AddOrders = () => {
 
     // State for managing the selected order data (name, price, quantity)
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
-    const [selectedOrder, setSelectedOrder] = useState({ id: '', name: '', price: 0, quantity: 1 });
+    const [selectedOrder, setSelectedOrder] = useState({ productCode: '', id: '', name: '', price: 0, quantity: 1 });
 
     const [searchTerm, setSearchTerm] = useState("");
     const [searchColumn, setSearchColumn] = useState("name");
@@ -28,6 +28,7 @@ const AddOrders = () => {
     // Column definitions for the DataGrids
 
     const orderColumns = [
+        { field: 'productCode', headerName: 'Product Code', flex: 2},
         { field: "name", headerName: "Product Name", flex: 1 },
         { field: "description", headerName: "Description", flex: 2 },
         { field: "price", headerName: "Price ($)", type: "number", flex: 1 },
@@ -42,6 +43,7 @@ const AddOrders = () => {
     );
 
     const cartColumns = [
+        { field: 'productCode', headerName: 'Product Code', width: 200},
         { field: 'name', headerName: 'Product Name', width: 200 },
         { field: 'price', headerName: 'Price', width: 150 },
         { field: 'quantity', headerName: 'Quantity', width: 150 },
@@ -60,42 +62,35 @@ const AddOrders = () => {
 
     const generateInvoice = () => {
         // Create the invoice object
-        const invoice = {
-            id: 0,
-            invoiceId: 'INV-12345',
-            invoiceReferenceNumber: 'REF-12345',
-            userId: 'user-123',
-            customerName: 'John Doe',
-            shippingAddress: '123 Main Street',
-            totalCost: cart.reduce((total, item) => total + item.price * item.quantity, 0),
-            shipped: 'No', // or 'Yes' depending on the order status
-            invoiceStatus: 'Pending', // or any relevant status
-            dateCreated: new Date().toISOString(),
-            invoiceProducts: cart.map(item => ({
+        const invoice = cart.map(item => ({
                 productCode: item.productCode,
                 quantity: item.quantity,
                 unitPrice: item.price,
-                invoice: 'INV-12345', // This should correspond to the actual invoice ID
-                product: {
-                    id: item.id,
-                    productCode: item.productCode,
-                    name: item.name,
-                    description: item.description || 'Product description not available',
-                    price: item.price,
-                    weight: item.weight || 0,
-                    uom: item.uom || 'unit',
-                    quantityPerUOM: item.quantityPerUOM || 1,
-                    stockLevel: item.stockLevel,
-                    dateCreated: new Date().toISOString()
-                }
-            }))
-        };
+                totalPrice: item.total
+            }));
     
         // Now you can send this `invoice` object to the backend
         console.log('Generated Invoice:', invoice);
     
         // Example: send the invoice to the backend via an API call
-        // axios.post('/api/invoices', invoice);
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `https://localhost:7187/api/new-order`, // how to add the search term here?
+            data: invoice,
+            headers: {
+                "email": localStorage.getItem("email")  // Custom header
+            },
+        };
+
+        axios.request(config)
+            .then((response) => {
+                alert(response.data);
+            })
+            .catch((error) => {
+                alert('Error has occurred');
+                console.log(error);
+            });
     };
     
 
@@ -106,6 +101,7 @@ const AddOrders = () => {
             const selectedRow = products.find(order => order.id === selectionModel[0]); // Get the selected order by id
             if (selectedRow) {
                 setSelectedOrder({
+                    productCode: selectedRow.productCode,
                     id: selectedRow.id,
                     name: selectedRow.name,
                     price: selectedRow.price,
@@ -152,7 +148,7 @@ const AddOrders = () => {
 
     // Handle submit order
     const handleSubmitOrder = () => {
-        alert('Order Submitted');
+        generateInvoice();
         // You can add logic here for submitting the order
     };
 
@@ -223,7 +219,14 @@ const AddOrders = () => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Typography variant="h6">Order Details</Typography>
+                    <Typography variant="h6">Product Details</Typography>
+                    <TextField
+                        label="Product Code"
+                        value={selectedOrder.productCode}
+                        disabled
+                        margin="normal"
+                        sx={{ width: '80%' }}
+                    />
                     <TextField
                         label="Product Name"
                         value={selectedOrder.name}
