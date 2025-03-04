@@ -34,6 +34,7 @@ const menuItems = [
                 text: 'View Orders',
                 icon: <ViewListIcon />,
                 roles: ['Customer'],
+                path: '/dashboard/my-orders'
             }
         ]
     },

@@ -20,6 +20,16 @@ public class InvoicesController : ControllerBase
         return Ok (await _invoiceService.GetAllInvoicesAsync());
     }
 
+    [HttpGet("/api/my-orders")]
+    public async Task<ActionResult<IEnumerable<Invoice>>> GetCustomerInvoices()
+    {
+        if (!Request.Headers.TryGetValue("email", out var customerEmail))
+        {
+            return BadRequest("Something went wrong.");
+        }
+        return Ok(await _invoiceService.GetAllCustomerInvoicesAsync(customerEmail));
+    }
+
     // GET: api/invoices/{invoiceId}
     [HttpGet("{invoiceId}")]
     public async Task<ActionResult<Invoice>> GetInvoiceByInvoiceId(string invoiceId)
@@ -38,12 +48,12 @@ public class InvoicesController : ControllerBase
     [HttpPost("/api/new-order")]
     public async Task<IActionResult> CreateNewInvoice([FromBody] List<RequestOrderProduct> ips)
     {
-        if (ips == null || !Request.Headers.TryGetValue("email", out var userEmail))
+        if (ips == null || !Request.Headers.TryGetValue("email", out var customerEmail))
         {
             return BadRequest();
         }
 
-        bool isSuccess = await _invoiceService.CreateNewInvoice(ips, userEmail);
+        bool isSuccess = await _invoiceService.CreateNewInvoice(ips, customerEmail);
 
         return Ok("Order Success");
     }

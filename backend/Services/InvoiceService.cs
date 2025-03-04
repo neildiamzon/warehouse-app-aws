@@ -21,6 +21,19 @@ public class InvoiceService : IInvoiceService
         return await _invoiceRepository.GetAllInvoicesAsync();
     }
 
+    public async Task<IEnumerable<Invoice>> GetAllCustomerInvoicesAsync(string customerEmail)
+    {
+        Customer? customer = await _userService.GetCustomerByEmail(customerEmail);
+
+        if (customer == null)
+        {
+            throw new UnauthorizedAccessException("Customer not found");
+        }
+
+
+        return await _invoiceRepository.GetAllCustomerInvoicesAsync(customer.UserId);
+    }
+
     public async Task<Invoice> GetInvoiceByInvoiceIdAsync(string id)
     {
         return await _invoiceRepository.GetInvoiceByInvoiceIdAsync(id);
@@ -94,6 +107,8 @@ public class InvoiceService : IInvoiceService
 
             tempIp.UnitPrice = orderedProduct.UnitPrice;
             tempIp.Quantity = orderedProduct.Quantity;
+            tempIp.TotalPrice = orderedProduct.TotalPrice;
+            inv.TotalCost += tempIp.TotalPrice;
 
             products.Add(tempIp);
         });

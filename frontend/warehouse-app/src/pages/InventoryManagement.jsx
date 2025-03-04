@@ -140,6 +140,7 @@ const InventoryManagement = () => {
     axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
+      alert('Item Successfully Added. Please Refresh table.')
     })
     .catch((error) => {
       console.log(error);

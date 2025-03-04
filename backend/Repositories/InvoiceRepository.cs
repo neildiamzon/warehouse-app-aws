@@ -1,6 +1,6 @@
 ﻿using backend.Database;
 using backend.Model;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 public class InvoiceRepository : IInvoiceRepository
 {
@@ -15,7 +15,13 @@ public class InvoiceRepository : IInvoiceRepository
     {
         return await _context.Invoices.ToListAsync();
     }
-
+    public async Task<IEnumerable<Invoice>> GetAllCustomerInvoicesAsync(string customerId)
+    {
+        return await _context.Invoices
+           .Include(i => i.InvoiceProducts)
+           .Where(i => i.UserId == customerId)
+           .ToListAsync();
+    }
     public async Task<Invoice> GetInvoiceByInvoiceIdAsync(string id)
     {
         return await _context.Invoices

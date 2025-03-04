@@ -25,8 +25,9 @@ const ViewProfile = () => {
       .then((response) => {
         const customerFields = [
           "customerName",
-          "contactPerson",
+          "email",
           "shippingAddress",
+          "contactPerson",
           "contactPersonEmail",
           "organization",
           "phoneNumber"
@@ -67,7 +68,7 @@ const ViewProfile = () => {
           {formData.customerName}
         </Typography>
         <Typography variant="body1" color="textSecondary" gutterBottom>
-          {formData.contactPersonEmail}
+          {formData.email}
         </Typography>
         <Divider sx={{ width: '100%', marginBottom: 2 }} />
         <Typography variant="body2" color="textSecondary" align="center" sx={{ marginBottom: 2 }}>
@@ -77,27 +78,12 @@ const ViewProfile = () => {
 
       {/* Contact Information Section */}
       <Grid container spacing={3} sx={{ marginTop: 4 }}>
+        {/* Shipping Address Section */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={2} sx={{ padding: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Contact Information
+            {formData.customerName}'s Information
             </Typography>
-            <TextField
-              label="Customer Name"
-              value={formData.customerName || ''}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              InputProps={{ readOnly: true }}
-            />
-            <TextField
-              label="Contact Person"
-              value={formData.contactPerson || ''}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              InputProps={{ readOnly: true }}
-            />
             <TextField
               label="Phone Number"
               value={formData.phoneNumber || ''}
@@ -107,7 +93,30 @@ const ViewProfile = () => {
               InputProps={{ readOnly: true }}
             />
             <TextField
-              label="Email"
+            label="Shipping Address"
+            value={formData.shippingAddress || ''}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputProps={{ readOnly: true }}
+          />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper elevation={2} sx={{ padding: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              Contact Person Information
+            </Typography>
+            <TextField
+              label="Contact Person"
+              value={formData.contactPerson || ''}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputProps={{ readOnly: true }}
+            />
+            <TextField
+              label="ContactPersonEmail"
               value={formData.contactPersonEmail || ''}
               fullWidth
               variant="outlined"
@@ -117,22 +126,7 @@ const ViewProfile = () => {
           </Paper>
         </Grid>
 
-        {/* Shipping Address Section */}
-        <Grid item xs={12} sm={6}>
-          <Paper elevation={2} sx={{ padding: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Shipping Address
-            </Typography>
-            <TextField
-              label="Shipping Address"
-              value={formData.shippingAddress || ''}
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              InputProps={{ readOnly: true }}
-            />
-          </Paper>
-        </Grid>
+        
       </Grid>
     </Container>
   );

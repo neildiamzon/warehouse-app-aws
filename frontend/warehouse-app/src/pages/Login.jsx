@@ -70,7 +70,7 @@ const handleCloseModals = () => {
         }}
       >
         <Typography color='black' variant="h5" component="h2" gutterBottom>
-          <strong>Foods Warehouse</strong>
+          <strong>NeonVault Wares</strong>
         </Typography>
         <Typography color='black' variant="h5" component="h2">
           Login
@@ -103,6 +103,7 @@ const handleCloseModals = () => {
           variant="contained"
           color="primary"
           fullWidth
+          type="submit"
           onClick={handleLogin}
         >
           Login

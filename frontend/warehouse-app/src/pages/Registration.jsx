@@ -91,7 +91,7 @@ const RegistrationForm = () => {
   return (
     <Container component="main" maxWidth="xs" sx={{backgroundColor: 'white', p: 9, borderRadius: 6}}>
         <Typography color="black" variant="h5" align="center" gutterBottom>
-       <strong>Food Warehouse</strong>
+       <strong>NeonVault Wares</strong>
       </Typography>
       <Typography color="black" variant="h5" align="center" gutterBottom>
         Customer Registration

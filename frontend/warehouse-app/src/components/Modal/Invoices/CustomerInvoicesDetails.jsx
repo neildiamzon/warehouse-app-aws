@@ -11,7 +11,7 @@ const productColumns = [
   { field: "total_price", headerName: "Total Price ($)", flex: 1 },
 ];
 
-const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
+const CustomerInvoiceDetailsModal = ({ open, handleClose, invoice }) => {
     var rows = [];
     if (invoice.invoiceProducts) {
         rows = invoice.invoiceProducts.map((ip, index) => {
@@ -29,9 +29,7 @@ const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={{ p: 4, bgcolor: "white", width: 1200, mx: "auto", mt: 20, borderRadius: 2 }}>
-        <Typography variant="h6">Invoice Details</Typography>
-        <Typography>User ID: <strong>{invoice.userId}</strong></Typography>
-        <Typography>Customer Name: <strong>{invoice.customerName}</strong></Typography>
+        <Typography variant="h6">Invoice Details</Typography>\
         <Typography>Shipping Address: <strong>{invoice.shippingAddress}</strong></Typography>
         <Typography>Total Cost: <strong>${invoice.totalCost}</strong></Typography>
         <Typography>Shipped: <strong>{invoice.shipped}</strong></Typography>
@@ -49,4 +47,4 @@ const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
   );
 };
 
-export default InvoiceDetailsModal;
+export default CustomerInvoiceDetailsModal;

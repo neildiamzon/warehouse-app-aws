@@ -16,7 +16,5 @@ namespace backend.Model
         public string ContactPersonEmail { get; set; }
 
         public string Organization { get; set; }
-
-        public string PhoneNumber { get; set; }
     }
 }
