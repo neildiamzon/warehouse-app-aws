@@ -114,4 +114,14 @@ public class InvoiceService : IInvoiceService
         });
         return products;
     }
+
+    public async Task<bool> CancelCustomerInvoice(string id)
+    {
+        Invoice? cancelledInvoice = await GetInvoiceByInvoiceIdAsync(id) 
+            ?? throw new Exception("Invoice not found");
+
+        await _invoiceRepository.CancelCustomerInvoiceAsync(cancelledInvoice);
+
+        return true;
+    }
 }

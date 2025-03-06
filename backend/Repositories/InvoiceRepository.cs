@@ -76,4 +76,21 @@ public class InvoiceRepository : IInvoiceRepository
             return false;
         }
     }
+
+    public async Task<bool> CancelCustomerInvoiceAsync(Invoice inv)
+    {
+        try
+        {
+            inv.InvoiceStatus = "Cancelled";
+            _context.Entry(inv).Property(i => i.InvoiceStatus).IsModified = true;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
+    }
 }

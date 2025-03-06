@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Container, TextField, MenuItem, Typography, Button, Box, Link } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import InvoiceDetailsModal from "../components/Modal/Invoices/InvoicesDetails";
@@ -54,6 +54,9 @@ const InvoiceManagement = () => {
     setModalOpen(false);
     setSelectedInvoice(null);
   };
+  useEffect(() =>{
+    handleGetInvoices();
+  }, []);
 
   const handleGetInvoices = () => {
     setLoading(true);
@@ -77,7 +80,7 @@ const InvoiceManagement = () => {
   };
 
   return (
-    <Container sx={{ mt: 2, width: "160%" }}>
+    <Container maxWidth="xl"sx={{ width: "160%", maxWidth: "100%", padding: "16px", overflow: "hidden"}}>
       <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
         Invoice Management
       </Typography>

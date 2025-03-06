@@ -14,4 +14,5 @@ public interface IInvoiceService
     Task DeleteInvoiceAsync(Guid id);
     Task<Invoice> GetInvoiceByInvoiceReferenceNumberAsync(string id);
     Task<bool> CreateNewInvoice(List<RequestOrderProduct> ips, String userEmail);
+    Task<bool> CancelCustomerInvoice(string id);
 }

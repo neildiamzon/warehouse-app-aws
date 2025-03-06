@@ -179,10 +179,15 @@ const AddOrders = () => {
 
 
     return (
-        <Container maxWidth="lg" sx={{ padding: 4, minHeight: '100vh' }}>
+        <Container maxWidth="lg" sx={{ width: '100%', padding: 4, minHeight: '100vh' }}>
             <Grid container spacing={4}>
                 {/* Orders List and Price/Quantity Section in the same row */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={50} md={9}>
+                    <Typography variant="h6">List of Products</Typography>
+                    <Typography sx={{mb: 2}} 
+                        variant="subtitle1"
+                        >Click a product - Set Quantity - Click "Add to Cart"</Typography>
+                    
                     <TextField
                         select
                         label="Search By"
@@ -204,7 +209,6 @@ const AddOrders = () => {
                         sx={{ width: 300 }}
                     />
 
-                    <Typography variant="h6">List of Products</Typography>
                     <div style={{ height: 300, width: '100%' }}>
                         <DataGrid
                             sx={{ width: '110%' }}
@@ -218,7 +222,7 @@ const AddOrders = () => {
                     </div>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={50} md={2} sx={{ml: 10, mt: 5}}>
                     <Typography variant="h6">Product Details</Typography>
                     <TextField
                         label="Product Code"
@@ -271,7 +275,10 @@ const AddOrders = () => {
                             rows={cart}
                             columns={cartColumns}
                             pageSize={5}
-                            disableSelectionOnClick
+                            sx={{
+                                width: '100%', // Makes the DataGrid take full width of the container
+                                maxWidth: '100%', // Prevents any overflow and keeps it within the container's limits
+                              }}
                         />
                     </div>
                 </Grid>

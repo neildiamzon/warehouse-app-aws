@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Container } from '@mui/material';
 
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 
 import AboutDeveloper from '../components/Modal/AboutDeveloper';
 import ContactMe from "../components/Modal/ContactMe";
@@ -17,11 +17,12 @@ const Login = () => {
   const navigate = useNavigate(); // Initialize the navigate hook
   const handleOpenModals = (modal) => {
     setOpenModal(modal);
-}
+  }
 
-const handleCloseModals = () => {
+  const handleCloseModals = () => {
     setOpenModal(null); // Close the dialog
-};
+  };
+
   const handleLogin = () => {
     let config = {
       method: 'post',
@@ -33,7 +34,7 @@ const handleCloseModals = () => {
         Password: password
       }
     };
-    
+
     axios.request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
@@ -48,18 +49,19 @@ const handleCloseModals = () => {
       });
   };
   return (
-    <Container 
-      sx={{ 
+    <Container
+      sx={{
         backgroundColor: "white",
         p: 9,
-        display: "flex", 
+        display: "flex",
         flexDirection: "column",
         position: "absolute",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: { xs: "90%", sm: "80%", md: "60%", lg: "50%" }}}>
-      <Box 
+        width: { xs: "90%", sm: "80%", md: "60%", lg: "50%" }
+      }}>
+      <Box
         component="form"
         sx={{
           display: 'flex',
@@ -103,19 +105,18 @@ const handleCloseModals = () => {
           variant="contained"
           color="primary"
           fullWidth
-          type="submit"
           onClick={handleLogin}
         >
           Login
         </Button>
         <Link to="/registration">Don't have an account? Register</Link>
       </Box>
-      <Box sx={{ display: 'flex' , justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap'}}>
-                <Link onClick={() => handleOpenModals('aboutDeveloper')} href="#">About the Developer</Link>
-                    {openModal === 'aboutDeveloper' && <AboutDeveloper onClose={handleCloseModals} />}
-                <Link onClick={() => handleOpenModals('contactMe')} href="#">Contact Me</Link>
-                    {openModal === 'contactMe' && <ContactMe onClose={handleCloseModals} />}
-            </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2, gap: 6, flexWrap: 'wrap' }}>
+        <Link onClick={() => handleOpenModals('aboutDeveloper')} href="#">About the Developer</Link>
+        {openModal === 'aboutDeveloper' && <AboutDeveloper onClose={handleCloseModals} />}
+        <Link onClick={() => handleOpenModals('contactMe')} href="#">Contact Me</Link>
+        {openModal === 'contactMe' && <ContactMe onClose={handleCloseModals} />}
+      </Box>
     </Container>
   );
 };

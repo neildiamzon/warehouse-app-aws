@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-
-namespace backend.Model
+﻿namespace backend.Model
 {
     public class Customer : AppUser
     {

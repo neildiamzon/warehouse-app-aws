@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
@@ -97,11 +97,16 @@ const InventoryManagement = () => {
     })
     .catch((error) => {
       console.log(error);
+    }).finally(() => {  
+      setDeleteModalOpen(false);
+      handleGetProducts();
     });
 
-    setDeleteModalOpen(false);
-    handleGetProducts();
   }
+
+  useEffect(() =>{
+    handleGetProducts();
+  }, []);
 
   const handleSaveEditProduct = (updatedProduct) => {
     let config = {
@@ -120,6 +125,9 @@ const InventoryManagement = () => {
     })
     .catch((error) => {
       console.log(error);
+    }).finally(() => {  
+      setEditModalOpen(false);
+      handleGetProducts();
     });
 
     setEditModalOpen(false);
@@ -144,10 +152,12 @@ const InventoryManagement = () => {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {  
+      setAddModalOpen(false);
+      handleGetProducts();
     });
     
-    setAddModalOpen(false);
-    handleGetProducts();
   }
 
   const handleAddProduct = () => {
@@ -183,7 +193,7 @@ const InventoryManagement = () => {
 
 
   return (
-    <Container sx={{ mt: 2, width: "160%" }}>
+    <Container maxWidth="xl" sx={{ mt: 2, width: "100%" }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
         Inventory Management
       </Typography>
@@ -251,6 +261,7 @@ const InventoryManagement = () => {
           </Button>
         </Box>
       </Box>
+      <Box sx={{ width: '100%', mt: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderColor: 'divider' }}>
       <DataGrid
         rows={filteredRows}
         columns={columns}
@@ -264,6 +275,7 @@ const InventoryManagement = () => {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
       />
+      </Box>
       {selectedProduct && (
         <EditProductModal
           open={editModalOpen}

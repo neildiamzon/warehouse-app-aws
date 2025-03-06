@@ -83,8 +83,6 @@ const RegistrationForm = () => {
 
       submitForm(formData);
       console.log("Form Data Submitted: ", formData);
-        
-
     }
   };
 

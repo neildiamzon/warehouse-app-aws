@@ -43,6 +43,8 @@ const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
             pageSize={10} 
             getRowId={(row) => row.product_id}/>
         </Box>
+        
+        <Button onClick={handleClose} variant="contained" sx={{ mt: 2 }}>Close</Button>
         <Button onClick={handleClose} variant="contained" sx={{ mt: 2 }}>Close</Button>
       </Box>
     </Modal>

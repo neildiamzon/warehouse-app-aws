@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, TextField, MenuItem, Typography, Button, Box, Link } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import CustomerInvoiceDetailsModal from "../components/Modal/Invoices/InvoicesDetails";
+import CustomerInvoiceDetailsModal from "../components/Modal/Invoices/CustomerInvoicesDetails";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 import axios from "axios";
@@ -53,6 +53,10 @@ const CustomerInvoices = () => {
     setSelectedInvoice(null);
   };
 
+  useEffect(() =>{
+    handleGetInvoices();
+  }, []);
+
   const handleGetInvoices = () => {
     setLoading(true);
     let config = {
@@ -63,7 +67,7 @@ const CustomerInvoices = () => {
         email: localStorage.getItem("email")
       },
     };
-
+    
     axios.request(config)
       .then((response) => {
         setInvoices(response.data);
@@ -76,10 +80,36 @@ const CustomerInvoices = () => {
       });
   };
 
+  const CancelCustomerInvoice = (reference) => {
+    setLoading(true);
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `https://localhost:7187/api/Invoices/cancel-invoice/${reference}`
+    };
+    
+    axios.request(config)
+      .then((response) => {
+        alert("Invoice Cancelled.");
+        console.log(response);
+      })
+      .catch((error) => {
+        alert('Error has occurred');
+        console.log(error);
+      }).finally(() => {
+        setLoading(false); // Hide loading state
+
+        handleGetInvoices();
+      });
+      
+    setModalOpen(false);
+    setSelectedInvoice(null);
+  }
+
   return (
     <Container sx={{ mt: 2, width: "160%" }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
-        Invoice Management
+        My Invoices
       </Typography>
       <Box sx={{ mt: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -124,7 +154,11 @@ const CustomerInvoices = () => {
         localeText={{noRowsLabel: 'Please click refresh to load data'}}
       />
       {selectedInvoice && (
-        <CustomerInvoiceDetailsModal open={modalOpen} handleClose={handleCloseModal} invoice={selectedInvoice} />
+        <CustomerInvoiceDetailsModal 
+          open={modalOpen} 
+          handleClose={handleCloseModal} 
+          invoice={selectedInvoice}
+          handleCancelInvoice={() => CancelCustomerInvoice(selectedInvoice.invoiceId)} />
       )}
     </Container>
   );

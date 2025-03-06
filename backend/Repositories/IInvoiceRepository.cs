@@ -10,4 +10,5 @@ public interface IInvoiceRepository
     Task DeleteInvoiceAsync(Guid id);
     Task<Invoice> GetInvoiceByInvoiceReferenceNumberAsync(string invoiceReferenceNumber);
     Task<bool> CreateInvoiceAndInvoiceProduct(Invoice inv, List<InvoiceProduct> processedIPs);
+    Task<bool> CancelCustomerInvoiceAsync(Invoice inv);
 }

@@ -57,4 +57,16 @@ public class InvoicesController : ControllerBase
 
         return Ok("Order Success");
     }
+
+    [HttpPut("cancel-invoice/{invId}")]
+    public async Task<IActionResult> CancelInvoice(string invId)
+    {
+        if (await _invoiceService.CancelCustomerInvoice(invId))
+        {
+            return Ok("Invoice cancelled");
+        }
+
+        return BadRequest();
+
+    }
 }
