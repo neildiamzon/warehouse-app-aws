@@ -2,16 +2,22 @@
 using backend.Model.Request;
 using backend.Services;
 using Microsoft.AspNetCore.Identity;
+using backend.Model.Response;
+using backend.Repositories;
 
 public class UserService : IUserService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IUserManagementRepository _userManagementRepository;
 
-    public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public UserService(UserManager<AppUser> userManager,
+        SignInManager<AppUser> signInManager,
+        IUserManagementRepository userManagementRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _userManagementRepository = userManagementRepository;
     }
 
     public async Task<AppUser?> GetUserByIdAsync(string userId)
@@ -84,5 +90,28 @@ public class UserService : IUserService
             CustomerName = customer.CustomerName
         };
         return retCustomer;
+    }
+
+    public List<ResponseUsers> GetUsersAsync()
+    {
+        return _userManagementRepository.GetAllCustomers();
+    }
+
+    public async Task<bool> DeleteUser(string id)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id)
+            ?? throw new Exception("User not found");
+            var result = await _userManager.DeleteAsync(user);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return false;
+        }
+       
+
     }
 }

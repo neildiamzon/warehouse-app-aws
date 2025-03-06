@@ -42,7 +42,8 @@ const menuItems = [
     {
         text: 'User Management',
         icon: <PersonIcon />,
-        roles: ['Admin', 'staff']
+        roles: ['Admin', 'staff'],
+        path: '/dashboard/user-management'
     }
 ];
 

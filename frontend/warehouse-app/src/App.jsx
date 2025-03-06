@@ -8,6 +8,7 @@ import RegistrationForm from './pages/Registration';
 import ViewProfile from './pages/Profile';
 import AddOrders from './pages/AddOrders';
 import CustomerInvoices from './pages/CustomerInvoices';
+import UserManagement from './pages/UserManagement';
 
 function App() {
   const isAuthenticated = true
@@ -22,6 +23,7 @@ function App() {
             <Route path="profile" element={<ViewProfile />} />
             <Route path="add-order" element={<AddOrders />} />
             <Route path="my-orders" element={<CustomerInvoices />} />
+            <Route path="user-management" element={<UserManagement />} />
           </Route>
           <Route path="/registration" element={<RegistrationForm />} />
         </Routes>
