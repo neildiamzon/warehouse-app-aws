@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import AboutDeveloper from '../components/Modal/AboutDeveloper';
 import ContactMe from "../components/Modal/ContactMe";
+
+import {baseUrl} from "../Constants";
+
 import axios from "axios";
 
 const Login = () => {
@@ -27,7 +30,7 @@ const Login = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/authentication/login',
+      url: baseUrl + `api/authentication/login`,
       headers: {},
       data: {
         Username: email,

@@ -114,4 +114,17 @@ public class UserService : IUserService
        
 
     }
+
+    public async Task<bool> UpdateCustomer(Customer customer)
+    {
+        try
+        {
+            return await _userManagementRepository.UpdateCustomer(customer);
+        } 
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return false;
+        }
+    }
 }

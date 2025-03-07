@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import InvoiceDetailsModal from "../components/Modal/Invoices/InvoicesDetails";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
+import {baseUrl} from "../Constants";
 import axios from "axios";
 
 const columns = [
@@ -63,7 +64,7 @@ const InvoiceManagement = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://localhost:7187/api/Invoices`, // how to add the search term here?
+      url: baseUrl + `api/Invoices`, // how to add the search term here?
       headers: {},
     };
 

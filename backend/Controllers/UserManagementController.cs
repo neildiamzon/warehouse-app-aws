@@ -26,5 +26,11 @@ public class UserManagementController : ControllerBase
     {
         return Ok("Success: " + _userService.DeleteUser(deleteId).Result);
     }
+
+    [HttpPut]
+    public ActionResult<string> EditCustomerInformation(Customer customer)
+    {
+        return Ok("Success: " + _userService.UpdateCustomer(customer).Result);
+    }
 }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid, Paper, Typography, Avatar, Button, Box, Divider, TextField, CircularProgress } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import axios from 'axios';
+import {baseUrl} from "../Constants";
 
 const ViewProfile = () => {
   const [formData, setFormData] = useState({});
@@ -12,7 +13,7 @@ const ViewProfile = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/user-details',
+      url: 'baseUrl + `api/user-details',
       headers: { 
         'Content-Type': 'application/json'
       },

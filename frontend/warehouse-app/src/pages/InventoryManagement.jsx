@@ -17,6 +17,7 @@ import EditProductModal from "../components/Modal/InventoryManagement/EditProduc
 import DeleteProductModal from "../components/Modal/InventoryManagement/DeleteProduct";
 import AddProductModal from "../components/Modal/InventoryManagement/NewProduct";
 
+import {baseUrl} from "../Constants";
 import axios from "axios";
 
 const columns = [
@@ -84,7 +85,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement/DeleteProducts',
+      url: baseUrl + `api/InventoryManagement/DeleteProducts`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -112,7 +113,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement',
+      url: baseUrl + `api/InventoryManagement`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -138,7 +139,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement',
+      url: baseUrl + `api/InventoryManagement`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -175,7 +176,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://localhost:7187/api/InventoryManagement`, // how to add the search term here?
+      url: baseUrl + `api/InventoryManagement`, // how to add the search term here?
       headers: {},
     };
 

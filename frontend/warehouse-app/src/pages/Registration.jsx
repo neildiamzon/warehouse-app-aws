@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Link , useNavigate} from 'react-router-dom';
 import axios from "axios";
+import {baseUrl} from "../Constants";
 
 const RegistrationForm = () => {
     const navigate = useNavigate(); // Initialize the navigate hook
@@ -41,7 +42,7 @@ const RegistrationForm = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/authentication/registration',
+      url: baseUrl + `api/authentication/registration`,
       data : formData
     };
 

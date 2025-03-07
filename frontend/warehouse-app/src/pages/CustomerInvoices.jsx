@@ -3,6 +3,7 @@ import { Container, TextField, MenuItem, Typography, Button, Box, Link } from "@
 import { DataGrid } from "@mui/x-data-grid";
 import CustomerInvoiceDetailsModal from "../components/Modal/Invoices/CustomerInvoicesDetails";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import {baseUrl} from "../Constants";
 
 import axios from "axios";
 
@@ -62,7 +63,7 @@ const CustomerInvoices = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://localhost:7187/api/my-orders`, // how to add the search term here?
+      url: baseUrl + `api/my-orders`, // how to add the search term here?
       headers: {
         email: localStorage.getItem("email")
       },
@@ -85,7 +86,7 @@ const CustomerInvoices = () => {
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `https://localhost:7187/api/Invoices/cancel-invoice/${reference}`
+      url: baseUrl + `api/Invoices/cancel-invoice/${reference}`
     };
     
     axios.request(config)

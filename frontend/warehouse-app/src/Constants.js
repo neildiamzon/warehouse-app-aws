@@ -1,1 +1,1 @@
-export const baseurl = 'http://localhost:7187'; // backend URL
+export const baseUrl = 'https://localhost:7187/'; // backend URL

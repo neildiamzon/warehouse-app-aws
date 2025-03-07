@@ -5,7 +5,7 @@ import {
     MenuItem
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
-
+import {baseUrl} from "../Constants";
 import axios from 'axios';
 
 const AddOrders = () => {
@@ -76,7 +76,7 @@ const AddOrders = () => {
         let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://localhost:7187/api/new-order`, // how to add the search term here?
+            url: baseUrl + `api/new-order`, // how to add the search term here?
             data: invoice,
             headers: {
                 "email": localStorage.getItem("email")  // Custom header
@@ -157,7 +157,7 @@ const AddOrders = () => {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://localhost:7187/api/InventoryManagement`, // how to add the search term here?
+            url: baseUrl + `api/InventoryManagement`, // how to add the search term here?
             headers: {},
         };
 

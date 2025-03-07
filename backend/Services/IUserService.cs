@@ -14,5 +14,6 @@ namespace backend.Services
         Task<string> AddUserAsync(RequestCustomerRegistration newCustomer);
         List<ResponseUsers> GetUsersAsync();
         Task<bool> DeleteUser(string id);
+        Task<bool> UpdateCustomer(Customer customer);
     }
 }
