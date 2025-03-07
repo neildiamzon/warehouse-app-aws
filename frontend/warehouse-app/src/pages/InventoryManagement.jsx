@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
@@ -17,6 +17,7 @@ import EditProductModal from "../components/Modal/InventoryManagement/EditProduc
 import DeleteProductModal from "../components/Modal/InventoryManagement/DeleteProduct";
 import AddProductModal from "../components/Modal/InventoryManagement/NewProduct";
 
+import {baseUrl} from "../Constants";
 import axios from "axios";
 
 const columns = [
@@ -84,7 +85,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement/DeleteProducts',
+      url: baseUrl + `api/InventoryManagement/DeleteProducts`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -97,17 +98,22 @@ const InventoryManagement = () => {
     })
     .catch((error) => {
       console.log(error);
+    }).finally(() => {  
+      setDeleteModalOpen(false);
+      handleGetProducts();
     });
 
-    setDeleteModalOpen(false);
-    handleGetProducts();
   }
+
+  useEffect(() =>{
+    handleGetProducts();
+  }, []);
 
   const handleSaveEditProduct = (updatedProduct) => {
     let config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement',
+      url: baseUrl + `api/InventoryManagement`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -120,6 +126,9 @@ const InventoryManagement = () => {
     })
     .catch((error) => {
       console.log(error);
+    }).finally(() => {  
+      setEditModalOpen(false);
+      handleGetProducts();
     });
 
     setEditModalOpen(false);
@@ -130,7 +139,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://localhost:7187/api/InventoryManagement',
+      url: baseUrl + `api/InventoryManagement`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -140,13 +149,16 @@ const InventoryManagement = () => {
     axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
+      alert('Item Successfully Added. Please Refresh table.')
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {  
+      setAddModalOpen(false);
+      handleGetProducts();
     });
     
-    setAddModalOpen(false);
-    handleGetProducts();
   }
 
   const handleAddProduct = () => {
@@ -164,7 +176,7 @@ const InventoryManagement = () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://localhost:7187/api/InventoryManagement`, // how to add the search term here?
+      url: baseUrl + `api/InventoryManagement`, // how to add the search term here?
       headers: {},
     };
 
@@ -182,7 +194,7 @@ const InventoryManagement = () => {
 
 
   return (
-    <Container sx={{ mt: 2, width: "160%" }}>
+    <Container maxWidth="xl" sx={{ mt: 2, width: "100%" }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
         Inventory Management
       </Typography>
@@ -250,6 +262,7 @@ const InventoryManagement = () => {
           </Button>
         </Box>
       </Box>
+      <Box sx={{ width: '100%', mt: 2, mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderColor: 'divider' }}>
       <DataGrid
         rows={filteredRows}
         columns={columns}
@@ -263,6 +276,7 @@ const InventoryManagement = () => {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
       />
+      </Box>
       {selectedProduct && (
         <EditProductModal
           open={editModalOpen}

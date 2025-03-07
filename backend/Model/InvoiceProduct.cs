@@ -23,9 +23,8 @@ namespace backend.Model
         [Column("unit_price")]
         public decimal UnitPrice { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("total_price")]
-        public decimal TotalPrice { get; private set; } // Computed column in SQL
+        public decimal TotalPrice { get; set; } // Computed column in SQL
 
         // Navigation properties
         public virtual Invoice Invoice { get; set; }

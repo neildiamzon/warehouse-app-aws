@@ -17,10 +17,14 @@ import Link from '@mui/material/Link';
 import AboutDeveloper from '../Modal/AboutDeveloper';
 import ContactMe from "../Modal/ContactMe";
 import { useNavigate } from "react-router-dom"; 
+import { useMediaQuery } from '@mui/material';
 
-const drawerWidth = 330;
+
 
 export default function MenuBar({userRole}) {
+    const drawerWidth = useMediaQuery('(min-width: 768px)') ? 240 : 180;  // Use media query to adjust width based on screen size
+
+
     const navigate = useNavigate();
     const filteredMenuItems = menuItems
         .filter(item => item.roles.includes(userRole)) 

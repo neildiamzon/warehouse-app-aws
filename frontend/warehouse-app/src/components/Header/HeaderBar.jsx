@@ -11,6 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import Person2Icon from '@mui/icons-material/Person2';
+import { useMediaQuery } from '@mui/material';
+
+
 
 export default function MenuBar({userRole}) {
 
@@ -19,7 +22,7 @@ export default function MenuBar({userRole}) {
         { key: 'Logout', label: 'Logout', path: '/logout' , icon: LogoutIcon}
     ];
 
-    const drawerWidth = 330
+    const drawerWidth = useMediaQuery('(min-width: 768px)') ? 240 : 180;  // Use media query to adjust width based on screen size
     
     const [anchorElUser, setAnchorElUser] = useState(null);
     
@@ -32,12 +35,14 @@ export default function MenuBar({userRole}) {
     };
 
     const handleMenuClick = (key, path) => {
+        
+        if (key === "profile") {
+            navigate('/dashboard/profile');
+        }
         if (key === "Logout") {
-            localStorage.removeItem("token"); // Remove authentication token
-            navigate('/login'); // Navigate to the login page
+            navigate('/login');
         }
         console.log(path)
-        //navigate(path); // Navigate to the respective page
       };
     const navigate = useNavigate();
     return (

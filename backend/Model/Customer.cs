@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-
-namespace backend.Model
+﻿namespace backend.Model
 {
     public class Customer : AppUser
     {
@@ -16,7 +13,5 @@ namespace backend.Model
         public string ContactPersonEmail { get; set; }
 
         public string Organization { get; set; }
-
-        public string PhoneNumber { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using backend.Database;
 using backend.Model;
 using Microsoft.EntityFrameworkCore;
+
 public class InvoiceRepository : IInvoiceRepository
 {
     private readonly WarehouseDbContext _context;
@@ -14,7 +15,13 @@ public class InvoiceRepository : IInvoiceRepository
     {
         return await _context.Invoices.ToListAsync();
     }
-
+    public async Task<IEnumerable<Invoice>> GetAllCustomerInvoicesAsync(string customerId)
+    {
+        return await _context.Invoices
+           .Include(i => i.InvoiceProducts)
+           .Where(i => i.UserId == customerId)
+           .ToListAsync();
+    }
     public async Task<Invoice> GetInvoiceByInvoiceIdAsync(string id)
     {
         return await _context.Invoices
@@ -47,5 +54,43 @@ public class InvoiceRepository : IInvoiceRepository
     public async Task<Invoice> GetInvoiceByInvoiceReferenceNumberAsync(string invoiceReferenceNumber)
     {
        return await _context.Invoices.FirstOrDefaultAsync(i => i.InvoiceReferenceNumber == invoiceReferenceNumber);
+    }
+
+    public async Task<bool> CreateInvoiceAndInvoiceProduct(Invoice inv, List<InvoiceProduct> processedIPs)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            await _context.Invoices.AddAsync(inv); 
+            await _context.InvoiceProducts.AddRangeAsync(processedIPs); // Bulk insert InvoiceProducts
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync(); // Commit if all inserts succeed
+            return true;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync(); // Rollback everything on error
+            Console.WriteLine($"Transaction failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<bool> CancelCustomerInvoiceAsync(Invoice inv)
+    {
+        try
+        {
+            inv.InvoiceStatus = "Cancelled";
+            _context.Entry(inv).Property(i => i.InvoiceStatus).IsModified = true;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+
     }
 }

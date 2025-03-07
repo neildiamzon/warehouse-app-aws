@@ -27,31 +27,40 @@ namespace backend.Controllers
                 return BadRequest("Invalid login attempt.");
             }
 
-            var userResult = await _userService.LoginAsync(model.Username, model.Password);
-
-            if (userResult.Succeeded)
-            {
-                _logger.LogInformation("User logged in.");
-            }
-            else
-            {
-                return Unauthorized("Invalid username or password.");
-            }
-
-            var user = await _userService.GetUserByNameAsync(model.Username);
+            var user = await _userService.LoginAsync(model.Username, model.Password);
 
             if (user == null)
             {
                 return Unauthorized("Invalid username or password.");
             }
 
+            Console.WriteLine("user: " + user.UserName);
+
             var userRole = await _userService.GetUserRolesAsync(user);
+
+            Console.WriteLine("USER ROLE: " + userRole[0]);
+
             var response = new ResponseLogin {
                 result = "Success",
                 role = userRole
             };
 
             return Ok(response);
+        }
+
+        [HttpPost("/api/user-details")]
+        public async Task<ActionResult<AppUser>> GetCustomerDetails([FromBody] RequestLogin email)
+        {
+            var foundCustomer = await _userService.GetCustomerByEmail(email.Username);
+            
+            return Ok(foundCustomer);
+        }
+
+        [HttpPost("registration")]
+        public async Task<IActionResult> Register([FromBody] RequestCustomerRegistration newCustomer)
+        {
+            Console.WriteLine(newCustomer);
+            return Ok(await _userService.AddUserAsync(newCustomer));
         }
     }
 }
