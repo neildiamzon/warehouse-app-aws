@@ -12,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
-import menuItems from './menuItems';
+import menuItems from './MenuItems';
 import Link from '@mui/material/Link';
 import AboutDeveloper from '../Modal/AboutDeveloper';
 import ContactMe from "../Modal/ContactMe";
