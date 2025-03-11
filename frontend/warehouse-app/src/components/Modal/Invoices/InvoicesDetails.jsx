@@ -11,7 +11,7 @@ const productColumns = [
   { field: "total_price", headerName: "Total Price ($)", flex: 1 },
 ];
 
-const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
+const InvoiceDetailsModal = ({ open, handleClose, invoice, handleCancelInvoice }) => {
     var rows = [];
     if (invoice.invoiceProducts) {
         rows = invoice.invoiceProducts.map((ip, index) => {
@@ -44,7 +44,7 @@ const InvoiceDetailsModal = ({ open, handleClose, invoice }) => {
             getRowId={(row) => row.product_id}/>
         </Box>
         
-        <Button onClick={handleClose} variant="contained" sx={{ mt: 2 }}>Close</Button>
+        <Button onClick={handleCancelInvoice} variant="contained" sx={{ mt: 2, backgroundColor: "red", mr: 2 }}>Cancel Invoice</Button>
         <Button onClick={handleClose} variant="contained" sx={{ mt: 2 }}>Close</Button>
       </Box>
     </Modal>

@@ -80,6 +80,31 @@ const InvoiceManagement = () => {
       });
   };
 
+  const CancelCustomerInvoice = (reference) => {
+    setLoading(true);
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: baseUrl + `api/Invoices/cancel-invoice/${reference}`
+    };
+    
+    axios.request(config)
+      .then((response) => {
+        alert("Invoice Cancelled.");
+        console.log(response);
+      })
+      .catch((error) => {
+        alert('Error has occurred');
+        console.log(error);
+      }).finally(() => {
+        setLoading(false); // Hide loading state
+
+        handleGetInvoices();
+      });
+      
+    setModalOpen(false);
+    setSelectedInvoice(null);
+  }
   return (
     <Container maxWidth="xl"sx={{ width: "160%", maxWidth: "100%", padding: "16px", overflow: "hidden"}}>
       <Typography variant="h4" gutterBottom sx={{ mb: 2, mt: 5 }}>
@@ -128,7 +153,11 @@ const InvoiceManagement = () => {
         localeText={{noRowsLabel: 'Please click refresh to load data'}}
       />
       {selectedInvoice && (
-        <InvoiceDetailsModal open={modalOpen} handleClose={handleCloseModal} invoice={selectedInvoice} />
+        <InvoiceDetailsModal 
+        open={modalOpen} 
+        handleClose={handleCloseModal} 
+        invoice={selectedInvoice} 
+        handleCancelInvoice={() => CancelCustomerInvoice(selectedInvoice.invoiceId)} />
       )}
     </Container>
   );
