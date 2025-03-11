@@ -266,7 +266,7 @@ const AddOrders = () => {
             {/* Added Orders (Cart) Section */}
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
                 <Grid item xs={12}>
-                    <Typography variant="h6">Added Orders (Cart)</Typography>
+                    <Typography variant="h6">My Cart</Typography>
                     <Typography variant="h6" sx={{ marginLeft: 2, display: 'inline' }}>
                         ({totalProducts} products, Total: ${totalPrice.toFixed(2)})
                     </Typography>
