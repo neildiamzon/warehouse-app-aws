@@ -1,8 +1,4 @@
-Here's a GitHub README format that adheres to best practices and uses Markdown to structure the content clearly:
-
----
-
-# Warehouse Draft Repository
+# Warehouse App - AWS deployment
 
 ## Description
 
@@ -22,8 +18,8 @@ Before setting up the project, ensure you have the following installed:
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/warehouse-draft-repo.git
-cd warehouse-draft-repo
+git clone https://github.com/neildiamzon/warehouse-app-aws.git
+cd warehouse-app-aws
 ```
 
 ### 1. Install EF Core Tools
