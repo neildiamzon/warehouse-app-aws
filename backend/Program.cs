@@ -1,3 +1,6 @@
+using Amazon.SimpleSystemsManagement;
+using Amazon.SimpleSystemsManagement.Model;
+using Amazon.Extensions.NETCore.Setup;
 using backend;
 using backend.Database;
 using backend.Model;
@@ -9,6 +12,29 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var awsOptions = builder.Configuration.GetAWSOptions();
+var ssmClient = awsOptions.CreateServiceClient<IAmazonSimpleSystemsManagement>();
+
+var responseUserDb = await ssmClient.GetParameterAsync(new GetParameterRequest
+{
+    Name = "/warehouse-app/local/db/connectionstring/userdb",
+    WithDecryption = true
+}); 
+
+builder.Configuration["ConnectionStrings:WarehouseUserDbConnection"] = responseUserDb.Parameter.Value;
+
+var responseWarehouseDb = await ssmClient.GetParameterAsync(new GetParameterRequest
+{
+    Name = "/warehouse-app/local/db/connectionstring/warehousedb",
+    WithDecryption = true
+});
+
+builder.Configuration["ConnectionStrings:WarehouseDbConnection"] = responseWarehouseDb.Parameter.Value;
+
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonSimpleSystemsManagement>();
+
+Console.WriteLine("AWS VALUE: " + builder.Configuration.GetConnectionString("WarehouseConnection"));
 // Enable CORS
 builder.Services.AddCors(options =>
 {
@@ -42,18 +68,20 @@ builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 // Register the UserDbContext for Identity
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDBConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WarehouseUserDbConnection")));
 
 // Register Identity with the custom AppUser class
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()
     .AddDefaultTokenProviders();
 
-// Register the CommerceDbContext for Invoices and Products
+// Register the DbContext for Invoices and Products
 builder.Services.AddDbContext<WarehouseDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WarehouseDBConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WarehouseDbConnection")));
 
 // Register DatabaseInitializer
 builder.Services.AddScoped<DatabaseInitializer>();
@@ -66,6 +94,12 @@ app.UseCors("AllowReactApp");
 // Initialize roles and admin user and seed data
 using (var scope = app.Services.CreateScope())
 {
+    // Apply migrations first
+    var warehouseDb = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();
+    var userDb = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+    await userDb.Database.MigrateAsync();
+    await warehouseDb.Database.MigrateAsync();
+
     var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
     var tempDbContext = scope.ServiceProvider.GetRequiredService<WarehouseDbContext>();
     await initializer.InitializeAsync(tempDbContext);
