@@ -1,6 +1,5 @@
 using Amazon.SimpleSystemsManagement;
 using Amazon.SimpleSystemsManagement.Model;
-using Amazon.Extensions.NETCore.Setup;
 using backend;
 using backend.Database;
 using backend.Model;
@@ -17,7 +16,7 @@ var ssmClient = awsOptions.CreateServiceClient<IAmazonSimpleSystemsManagement>()
 
 var responseUserDb = await ssmClient.GetParameterAsync(new GetParameterRequest
 {
-    Name = "/warehouse-app/local/db/connectionstring/userdb",
+    Name = "/warehouse-app/local/db/connectionstring/userdb", // Change to "prod"
     WithDecryption = true
 }); 
 
@@ -25,7 +24,7 @@ builder.Configuration["ConnectionStrings:WarehouseUserDbConnection"] = responseU
 
 var responseWarehouseDb = await ssmClient.GetParameterAsync(new GetParameterRequest
 {
-    Name = "/warehouse-app/local/db/connectionstring/warehousedb",
+    Name = "/warehouse-app/local/db/connectionstring/warehousedb", // Change to "prod"
     WithDecryption = true
 });
 
@@ -34,7 +33,6 @@ builder.Configuration["ConnectionStrings:WarehouseDbConnection"] = responseWareh
 builder.Services.AddDefaultAWSOptions(awsOptions);
 builder.Services.AddAWSService<IAmazonSimpleSystemsManagement>();
 
-Console.WriteLine("AWS VALUE: " + builder.Configuration.GetConnectionString("WarehouseConnection"));
 // Enable CORS
 builder.Services.AddCors(options =>
 {
@@ -51,7 +49,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
             ;
